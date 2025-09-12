@@ -1,6 +1,0 @@
-\babel@toc {russian}{}\relax 
-\contentsline {chapter}{\numberline {1}Краткие сведения о прототипе}{4}{}%
-\contentsline {section}{\numberline {1.1}Обзор прототипа}{4}{}%
-\contentsline {section}{\numberline {1.2}Внешнее описание}{5}{}%
-\contentsline {section}{\numberline {1.3}Внутрення компоновка}{6}{}%
-\contentsline {chapter}{\numberline {2}Массовый анализ}{8}{}%
