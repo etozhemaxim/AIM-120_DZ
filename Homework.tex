@@ -1,0 +1,235 @@
+\documentclass[a4paper,12pt]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{float}
+\usepackage{ulem}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{indentfirst}
+\usepackage{placeins}
+\usepackage{lipsum}
+\usepackage{longtable}
+\usepackage{csquotes}
+\usepackage[style=gost-numeric,sorting=none]{biblatex}
+\usepackage{enumitem}
+
+
+
+
+\addbibresource{references.bib}
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+    {\normalfont\huge\bfseries}
+    {\chaptertitlename\ \thechapter}
+    {20pt}
+    {\Huge}
+\usepackage{booktabs}
+\usepackage{makecell}
+\graphicspath{{Image/}}
+
+\geometry{
+    a4paper,
+    total={170mm,257mm},
+    left=20mm,
+    top=20mm,
+}
+
+\newcommand{\specialcell}[2][c]{%
+    \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}%
+}
+
+\usepackage{etoolbox}
+\patchcmd{\thebibliography}
+  {\chapter*{\bibname}}
+  {\section*{\centering СПИСОК ЛИТЕРАТУРЫ}}
+  {}{}
+\patchcmd{\thebibliography}
+  {\addcontentsline{toc}{chapter}{\bibname}}
+  {\addcontentsline{toc}{section}{СПИСОК ЛИТЕРАТУРЫ}}
+  {}{}
+
+
+\usepackage{setspace}
+\onehalfspacing
+
+
+\begin{document}
+
+
+
+
+
+\begin{center}
+    \begin{tabular}{cc}
+
+        \specialcell{\includegraphics[width=0.8in,height=0.9in]{images/BMSTU.jpg}} & 
+        \specialcell{
+            \textbf{Министерство науки и высшего образования Российской Федерации} \\
+            \textbf{Федеральное государственное автономное образовательное учреждение} \\
+            \textbf{высшего образования} \\
+            \textbf{«Московский государственный технический университет} \\
+            \textbf{имени Н. Э. Баумана} \\
+            \textbf{(национальный исследовательский университет)»} \\
+            \textbf{(МГТУ им. Н. Э. Баумана)}
+        } \\
+   
+    \end{tabular}
+\end{center}
+
+\vspace{1cm}
+
+\begin{center}
+    \textbf{ФАКУЛЬТЕТ \uline{«СПЕЦИАЛЬНОЕ МАШИНОСТРОЕНИЕ»}}
+    
+    \textbf{КАФЕДРА \uline{«РАКЕТНЫЕ И ИМПУЛЬСНЫЕ СИСТЕМЫ» (СМ-6)}}
+    
+    \vspace{1cm}
+    
+    \textbf{ДОМАШНЕЕ ЗАДАНИЕ}
+    
+    \vspace{1cm}
+    
+    ПО ДИСЦИПЛИНЕ:
+    
+    \vspace{0.5cm}
+    
+    \begin{tabular}{c}
+       
+        \specialcell{Проектирование ракетного оружия} \\
+        \hline
+    \end{tabular}
+    
+    \vspace{1cm}
+    
+    НА ТЕМУ:
+    
+    \vspace{0.5cm}
+    
+    \begin{tabular}{c}
+       
+        \specialcell{Массовый анализ AIM-120 AMRAAM} \\
+        \hline
+    \end{tabular}
+    
+    \vspace{1cm}
+
+    
+    \vspace{1cm}
+    
+
+    \begin{tabular}{llp{3cm}l}
+       
+        Выполнил: студент группы СМ6-62 & 
+        (подпись, дата) & 
+         & 
+        Ерофеев М.В.\\
+        \hline
+    \end{tabular}
+    
+    \vspace{1cm}
+    
+    \begin{tabular}{llp{3cm}l}
+    
+        Проверил &  (подпись, дата) & & Лаптева Л.А.\\
+        \hline
+    \end{tabular}
+    
+    \vspace{6cm}
+    
+    Москва, 2025 г.
+\end{center}
+\tableofcontents
+
+\newpage
+\chapter*{Принятые сокращения}
+\begin{description}[font=\normalfont\itshape] % обычный шрифт + курсив
+\item[WDU] — Weapons Detonation Unit (блок подрыва боевой части)
+\item[WGU] — Weapons Guidance Unit (блок наведения вооружения)
+\item[WPU] — Weapons Propulsion Unit (двигательный отсек вооружения)
+\item[ICPU] — Integrated Control and Power Unit (встроенный блок управления и питания)
+\item[РДТТ] — ракетный двигатель твердого топлива
+\item[БЧ] — боевая часть
+\end{description}
+
+
+\newpage
+\chapter{Краткие сведения о прототипе}
+\section{Обзор прототипа}
+Ракета AIM-120A AMRAAM (Advanced Medium-Range Air-to-Air Missile –усовершенствованная ракета класса "воздух-воздух"  средней дальности) выполнена по нормальной аэродинамической схеме с «Х» – образным расположением консолей крыла и рулей.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textheight]{images/1.jpg}
+\caption{Ракета AIM-120 AMRAAM}
+\label{AIM-120}
+\end{figure}
+
+\newpage
+\section{Внешнее описание}
+Ракета цилиндрическая, длинная, со стреловидным обтекателем.
+Носовая часть имеет длину 18.5 дюймов и окрашена в белый цвет. Далее расположена секция батарей серого цвета длиной 17.5 дюймов. Имеется желтая и чёрная полоса с надписью «Осторожно — Используйте защитный чехол для обтекателя».
+Следом идет неокрашенная серая секция управления (WCU) длиной 18.75 дюймов. За ней расположена секция БЧ (WDU), длиной 9.5 дюймов, темно-серого цвета.
+Эта секция снизу переходит в более светло-серую секцию РДТТ (WPU) длиной 74.75 дюймов. На ней в верхней части расположена черная и синяя полосы, обозначающие, что это учебный снаряд.
+За секцией РДТТ находится секция управления рулями длиной 14.75 дюймов. Рули длинные, частично треугольной формы с прямым краем сверху. На них наклеены красно-белые полосы и нанесены номера.
+Передние крылья также имеют наклейки и номера. Они алюминиевые, треугольной формы. На ракете присутствуют ушки для крепления к пилону.
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.55\textheight]{images/2.jpg}
+\caption{Ракета AIM-120 AMRAAM}
+\label{AIM-120}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.65\textheight]{images/3.jpg}
+\caption{Размеры отсеков в миллиметрах}
+\label{AIM-120}
+\end{figure}
+
+\newpage
+\section{Внутрення компоновка}
+На рисунке 1.4 представлена внутрення компоновка AIM-120, перевод названий модулей дан ниже.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\textheight]{images/4.jpg}
+\caption{Компоновка ракеты AIM-120}
+\label{AIM-120}
+\end{figure}
+
+\begin{description}[font=\normalfont\itshape] % обычный шрифт + курсив
+\item[Antenna] — антенна головки самонаведения
+\item[(Thermal) batteries] — пиротехнические баратареи, часть ICPU
+\item[Transmitter] — передатчик, излучатель
+\item[Electronics] — электроника 
+\item[Inertial Reference Unit (IRA)] — инерциальная система наведения 
+\item[Target Detecting Device (TDD)] — устройство обнаружения цели
+\item[Armament Section] — боевая часть 
+\item[Rocket Motor] — РДТТ
+\item[Contol Actuator] — рулевая машинка
+\item[Data Link] — канал передачи данных 
+\end{description}
+
+Ниже на рисунке 1.5 представлено разбиение компоновки ракеты на 4 отсека в соответсвии с требованиями ДЗ.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.65\textheight]{images/5.jpg}
+\caption{Схема разбиения компоновки ракеты}
+\label{AIM-120}
+\end{figure}
+
+\chapter{Массовый анализ}
+
+\end{document}
