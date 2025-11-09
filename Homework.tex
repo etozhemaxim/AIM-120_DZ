@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{report}
+\documentclass[a4paper,12pt]{extreport}
 \usepackage[utf8]{inputenc}
 \usepackage[T2A]{fontenc}
 \usepackage[russian]{babel}
@@ -458,6 +458,229 @@ ROW = Wt - GCWt - PWt - WHWt = 337.84  - 109.52 - 131.551 - 40.315 = 56.454 \, \
 \caption{Эскиз ракеты с координатами центров масс}
 \label{AIM-120}
 \end{figure}
+
+\chapter{Аеродинамический расчёт}
+
+\section{Расчёт подъёмной силы $c_y$}
+
+\subsection{Некоторые пояснения}
+
+В зависимости от связанной или скоростной системы координат расчёт $c_y$ производится по формулам \ref{eq:cy_formula1} и \ref{eq:cy_formula2} соответственно.
+
+\begin{equation}
+\label{eq:cy_formula1}
+c_y = c_{y_a0} + c_{y_a}^\alpha \cdot \alpha + c_{y_a}^{\delta \mathrm{I}} \cdot \delta \mathrm{I} + c_{y_a}^{\delta \mathrm{II}} \cdot \delta \mathrm{II},
+\end{equation}
+
+\begin{equation}
+\label{eq:cy_formula2}
+c_y = c_{y_a10} + c_{y_a1}^\alpha \cdot \alpha + c_{y_a1}^{\delta \mathrm{I}} \cdot \delta \mathrm{I} + c_{y_a1}^{\delta \mathrm{II}} \cdot \delta \mathrm{II},
+\end{equation}
+
+где $\alpha$ -- угол атаки (в радианах), $c_{y_a0}$ и $c_{y_a10}$ -- значения $c_y$ и $c_{y1}$ при $\alpha = \delta_\mathrm{I} =  \delta_\mathrm{II} = 0$, $c_{y_a}^\alpha, c_{y_a}^{\delta \mathrm{I}},c_{y_a}^{\delta \mathrm{II}},c_{y_a1}^\alpha,c_{y_a1}^{\delta \mathrm{I}},c_{y_a1}^{\delta \mathrm{II}}$ -- частные производные коэффицентов $c_y$ или
+$c_{y1}$ по углам $\alpha, \delta_\mathrm{I}$ и $\delta_\mathrm{II} $, взятые $\alpha = \delta_\mathrm{I} =  \delta_\mathrm{II} = 0$.
+
+Данное соотношение справедливо для линейного диапазона, т.е. $sin(\alpha)\approx \alpha $.
+
+\subsection{Подготовительные расчёты}
+
+Некоторые вводные данные представлены в таблице \ref{tab:geometry}.
+
+\begin{table}[h]
+\centering
+\caption{Геометрические параметры летательного аппарата}
+\label{tab:geometry}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Параметр} & \textbf{Значение} & \textbf{Единица измерения} \\ 
+\hline
+Диаметр миделя $D$ & 0.178 & м \\
+\hline
+Диаметр в области передних консолей $D_I$ & 0.178 & м \\
+\hline
+Диаметр в области задних консолей $D_{II}$ & 0.178 & м \\
+\hline
+Относительный диаметр корпуса $\bar{D}$ & 0.6952 & -- \\
+\hline
+Длина фюзеляжа $l_f$ & 3.906 & м \\
+\hline
+Длина носовой части $l_{nos}$ & 0.47 & м \\
+\hline
+Длина кормовой части $l_{korm}$ & 0.375 & м \\
+\hline
+Площадь миделя $S_m$ & 0.02488 & м\textsuperscript{2} \\
+\hline
+Размах крыла $l_I$ & 0.484 & м \\
+\hline
+Размах руля $l_{II}$ & 0.5808 & м \\
+\hline
+\end{tabular}
+\end{table}
+
+Относительный диаметр корпуса $\bar{D}$:
+
+\[ 
+\bar{D} = \frac{D}{l_f} = \frac{0.178}{3.906} = 0.6952 
+ \]
+
+Площадь миделя $S_m$:
+
+\[ 
+S_m = \frac{\pi D^2}{4} = \frac{\pi 0.178^2}{4} = 0.02488{\text{ м}^2}
+ \]
+          
+Коэффициенты интерференции рассчитываются по следующим формулам:
+
+\[ 
+k_{\alpha \alpha_{\text{теор}}} = (1 + 0.41 \cdot \bar{D})^2 = (1 + 0.41 \cdot 0.6952)^2 = 1.6513
+\]
+
+\[ 
+K_{\alpha \alpha_{\text{теор}}} = (1 + \bar{D})^2 = (1 + 0.6952)^2 = 2.8737
+ \]
+
+
+\subsection*{Параметры для функции \texttt{get\_c\_y\_alpha\_IsP}}
+
+\begin{align*}
+\lambda & \quad \text{удлинение несущей поверхности} \\
+\chi_{0.5} & = 0.5 \; \text{рад} \quad \text{угол стреловидности по линии середин хорд} \\
+\bar{c} & = 0.042 \quad \text{относительная толщина профиля} \\
+\zeta & = 1 \quad \text{обратное сужение несущей поверхности}
+\end{align*}
+
+\subsection*{Параметры для функции \texttt{get\_c\_y\_alpha\_NosCil\_Con}}
+
+\begin{align*}
+\lambda_{\text{нос}} & = \frac{l_{\text{нос}}}{D} = \frac{0.47}{0.178} \quad \text{удлинение носовой части} \\
+\lambda_{\text{цил}} & = \frac{l_f}{D} = \frac{3.906}{0.178} \quad \text{удлинение цилиндрической части}
+\end{align*}
+
+\subsection*{Геометрические параметры крыльевых поверхностей}
+
+\begin{align*}
+b_{\text{кр}} & = 0.1 \; \text{м} \quad \text{хорда крыла} \\
+b_{\text{оп}} & = 0.025 \; \text{м} \quad \text{хорда оперения} \\
+l_{\text{размах}} & = 0.144 \; \text{м} \quad \text{размах крыла} \\
+l_{\text{размах оп}} & = 0.066 \; \text{м} \quad \text{размах оперения} \\
+S_{\text{конс}} & = 2 \times 0.036 \times 0.1 = 0.0072 \; \text{м}^2 \quad \text{площадь консолей крыла} \\
+S_{\text{оп}} & = 2 \times 0.033 \times 0.025 = 0.00165 \; \text{м}^2 \quad \text{площадь оперения}
+\end{align*}
+
+\subsection*{Расчётные параметры крыльевых поверхностей}
+
+\begin{align*}
+l_{\text{размах конс}} & = l_{\text{размах}} - D = 0.144 - 0.178 \; \text{м} \\
+\lambda & = \frac{l_{\text{размах конс}}^2}{S_{\text{конс}}} \quad \text{удлинение крыла} \\
+\lambda_{\text{оп}} & = \frac{l_{\text{размах оп}}^2}{S_{\text{оп}} + b_{\text{кр}}^2} \quad \text{удлинение оперения}
+\end{align*}
+
+\subsection*{Координаты центров давления}
+
+\begin{align*}
+x_b & = 1.262 \; \text{м} \quad \text{координата центра давления крыла} \\
+x_{b_{\text{оп}}} & = 0.356 \; \text{м} \quad \text{координата центра давления оперения}
+\end{align*}
+
+\subsection*{Параметры пограничного слоя}
+
+\begin{align*}
+L_1 & = x_b + \frac{b_{\text{кр}}}{2} \; \text{м} \quad \text{длина передней части корпуса для крыла} \\
+L_{1_{\text{оп}}} & = x_{b_{\text{оп}}} + \frac{b_{\text{оп}}}{2} \; \text{м} \quad \text{длина передней части корпуса для оперения} \\
+\bar{L}_1 & = \frac{L_1}{D} \quad \text{относительная длина передней части (крыло)} \\
+\bar{L}_{1_{\text{оп}}} & = \frac{L_{1_{\text{оп}}}}{D} \quad \text{относительная длина передней части (оперение)}
+\end{align*}
+
+\subsection*{Физические константы}
+
+\begin{align*}
+\nu & = 15.1 \times 10^{-6} \; \text{м}^2/\text{с} \quad \text{кинематическая вязкость воздуха} \\
+\eta_k & = 1.0 \quad \text{коэффициент полноты корпуса} \\
+\kappa_M & = 0.96 \quad \text{поправочный коэффициент для } M = 2
+\end{align*}
+
+\subsection*{Параметры для функций скоса потока}
+
+\begin{align*}
+\alpha_p & = 0.0, \quad \varphi_\alpha = 0.0, \quad \psi_I = 0.0, \quad \psi_{II} = 0.0 \quad \text{угловые параметры} \\
+l_{1c_{II}} & = 0.036 \; \text{м} \quad \text{размах одной консоли} \\
+\zeta_{II} & = 0.0 \quad \text{обратное сужение} \\
+b_{b_{II}} & = b_{\text{кр}} \quad \text{длина бортовой хорды} \\
+\chi_{0_{II}} & = 0.0 \; \text{рад} \quad \text{угол стреловидности} \\
+L_{vI_{bII}} & = 0.882 \; \text{м} \quad \text{расстояние до точки схода вихря}
+\end{align*}
+
+\subsection*{Дополнительные геометрические параметры}
+
+\begin{align*}
+\lambda_{\text{нос}} & = 0.5 \quad \text{удлинение носовой части} \\
+\lambda_{\text{цил}} & = 20.1 \quad \text{удлинение цилиндрической части} \\
+L_{xv_k} & = 0.086 \; \text{м} \quad \text{длина задней части для крыла} \\
+L_{xv_{\text{оп}}} & = 1.068 \; \text{м} \quad \text{длина задней части для оперения}
+\end{align*}
+
+\subsection*{Вспомогательные коэффициенты}
+
+\begin{align*}
+Fi_1 & = 5.0 \\
+Fi_2 & = 0.4951 \\
+Fi_{2_{\text{оп}}} & = 5.0
+\end{align*}
+
+
+
+\subsection{Расчёт аэродинамических характеристик изолированных элементов}
+Для каждого числа Маха $M[i]$:
+\begin{align*}
+c_{y\alpha_{\text{кр}}}[i] &= \frac{\texttt{get\_c\_y\_alpha\_IsP}(M[i], \lambda, \bar{c}, \chi_{0.5}, \zeta)}{57.3} \\
+c_{y\alpha_{\text{оп}}}[i] &= \frac{\texttt{get\_c\_y\_alpha\_IsP}(M[i], \lambda_{\text{оп}}, \bar{c}, \chi_{0.5}, \zeta)}{57.3} \\
+c_{y\alpha_{\text{изкор}}}[i] &= \frac{\texttt{get\_c\_y\_alpha\_NosCil\_Ell}(M[i], \lambda_{\text{нос}}, \lambda_{\text{цил}})}{57.3}
+\end{align*}
+
+\subsection{Учёт пограничного слоя}
+
+\begin{align*}
+\bar{\delta}_{\text{звз}}[i] &= \frac{0.093 L_1 (1 + 0.4M[i] + 0.147M[i]^2 - 0.006M[i]^3)}{(V[i]L_1/\nu)^{0.2}D} \\
+x_{\text{пс кр}}[i] &= \left(1 - \frac{2\bar{D}^2 \bar{\delta}_{\text{звз}}[i]}{1 - \bar{D}^2}\right) \left(1 - \frac{\bar{D}(\eta_k - 1)\bar{\delta}_{\text{звз}}[i]}{(1 - \bar{D})(\eta_k + 1)}\right)
+\end{align*}
+
+\subsection{Расчёт коэффициентов интерференции}
+
+Для $M[i] \geq 1$:
+\begin{align*}
+\pi M D_{\text{кв}}[i] &= \frac{\pi}{2} D \sqrt{M[i]^2 - 1} \\
+\bar{l}_{xv_{\text{кр}}}[i] &= \frac{L_{xv_k}}{\pi M D_{\text{кв}}[i]} \\
+\bar{b}_{\text{кр}}[i] &= \frac{b_{\text{кр}}}{\frac{\pi}{2} D \sqrt{M[i]^2 - 1}} \\
+K_{\alpha \alpha_{\text{кр}}}[i] &= \begin{cases}
+K_{\alpha \alpha_{\text{теор}}} \kappa_{\text{нос}} x_{\text{пс кр}}[i] \kappa_M, & \text{если } \bar{l}_{xv_{\text{кр}}}[i] > \pi M D_{\text{кв}}[i] \\
+(k_{\alpha \alpha_{\text{теор}}} + (K_{\alpha \alpha_{\text{теор}}} - k_{\alpha \alpha_{\text{теор}}}) F_{L_{xv_{\text{кр}}}}[i]) x_{\text{пс кр}}[i] \kappa_{\text{нос}} \kappa_M, & \text{иначе}
+\end{cases}
+\end{align*}
+
+\subsection{Расчёт скоса потока}
+
+\begin{align*}
+\bar{z}[i] &= \texttt{get\_bar\_z\_v}(M[i], \lambda, \chi_{0.5}, \zeta) \\
+z_v[i] &= 0.5(D + \bar{z}[i](l_{\text{размах зад}} - D)) \\
+i_v[i] &= \texttt{get\_i\_v}(\zeta, D, l_{\text{размах зад}}, y_v, z_v[i]) \\
+\psi_\epsilon[i] &= \texttt{get\_psi\_eps}(M[i], \alpha_p, \varphi_\alpha, \psi_I, \psi_{II}, z_v[i], y_v, L_{vI_{bII}}, D, l_{1c_{II}}, \zeta_{II}, b_{b_{II}}, \chi_{0_{II}}) \\
+\varepsilon_{\alpha_{\text{ср}}}[i] &= \frac{57.3}{2\pi} \cdot \frac{i_v[i]}{\bar{z}[i]} \cdot \frac{l_{\text{размах оп}}}{l_{\text{размах конс}}} \cdot \frac{c_{y\alpha_{\text{оп}}}[i]}{\lambda_{\text{оп}}} \cdot \frac{k_{aa_{\text{оп}}}[i]}{K_{aa_{\text{кр}}}[i]} \cdot \psi_\epsilon[i]
+\end{align*}
+
+\subsection{Учёт торможения потока}
+
+\begin{align*}
+\kappa_{q_{\text{нос}}}[i] &= \texttt{get\_kappa\_q\_Nos\_Con}(M[i], \lambda_{\text{нос}}) \\
+\kappa_{q_{\text{исп}}}[i] &= \texttt{get\_kappa\_q\_IsP}(M[i], L_A, b_{\text{оп}})
+\end{align*}
+
+\subsection{Формирование итоговых аэродинамических характеристик}
+\begin{align*}
+S &= S_{\text{оп}} + S_{\text{конс}} + S_f \\
+\bar{s}_f &= \frac{S_f}{S}, \quad \bar{s}_1 = \frac{S_{\text{оп}}}{S}, \quad \bar{s}_2 = \frac{S_{\text{конс}}}{S} \\
+c_{y\alpha_1}[i] &= c_{y\alpha_f}[i] \bar{s}_f + c_{y\alpha_1}[i] \bar{s}_1 \kappa_{t1}[i] + c_{y\alpha_2}[i] \bar{s}_2 \kappa_{t2}[i] \\
+c_{y1}[i] &= c_{y\alpha_1}[i] \cdot \alpha[2000]
+\end{align*}
 
 \newpage
 \begin{thebibliography}{9}
