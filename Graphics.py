@@ -74,8 +74,8 @@ for i, angle in enumerate(angles):
              linestyle='-',
              label=fr'$\alpha = {angle}^\circ$ (с торможением)')
 
-ax1.set_xlabel('M')
-ax1.set_ylabel(r'$C_y\text{из.ф}$', fontsize=12)
+ax1.set_xlabel('M',fontsize=15 )
+ax1.set_ylabel(r'$C_y\text{из.ф}$', fontsize=16)
 ax1.grid(True, alpha=0.3)
 ax1.legend(loc='upper right', fontsize=10)
 
@@ -123,10 +123,10 @@ for j, mach in enumerate(selected_mach):
              markersize=5,
              label=fr'$M = {mach}$ (с торможением)')
 
-ax2.set_xlabel('$\\alpha$')
-ax2.set_ylabel(r'$C_y\text{из.ф}$', fontsize=12)
+ax2.set_xlabel('$\\alpha$' ,fontsize=16)
+ax2.set_ylabel(r'$C_y\text{из.ф}$', fontsize=16)
 ax2.grid(True, alpha=0.3)
-ax2.legend(loc='upper left', fontsize=8)  # Уменьшил шрифт для размещения
+ax2.legend(loc='upper left', fontsize=10) 
 
 # Добавляем линию при α = 0 для наглядности
 ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
@@ -135,18 +135,139 @@ plt.tight_layout()
 plt.savefig('comprehensive_aerodynamics_with_kappa.png', dpi=300, bbox_inches='tight')
 plt.show()
 
-# Дополнительный вывод информации о торможении
-print(f"\nКоэффициент торможения для разных чисел Маха:")
-print(f"lambda_nos = {lambda_nos:.3f}")
-for mach in [1.0, 1.5, 2.0, 3.0, 4.0]:
-    kappa = calculate_kappa_q_nos_con(mach, lambda_nos)
-    print(f"M = {mach}: κq = {kappa:.3f}")
 
-# Сохраняем данные с торможением в отдельный файл
-output_columns = ['Mach', 'kappa_q']
-for angle in angles:
-    output_columns.extend([f'alpha_{angle}', f'alpha_{angle}_with_kappa'])
+# Чтение данных для изолированного крыла
+data = pd.read_csv('krylo_isP.csv')
 
-output_data = data_with_kappa[output_columns]
-output_data.to_csv('aerodynamics_data_with_kappa.csv', index=False)
-print(f"\nДанные с учетом торможения сохранены в 'aerodynamics_data_with_kappa.csv'")
+# Создание фигуры с двумя графиками бок о бок
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
+
+# Цвета для графиков
+colors = ['black', 'blue', 'green', 'orange', 'red', 'purple']
+mach_colors = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'cyan', 'magenta']
+
+angles = [-10, -5, 0, 5, 10]
+
+# ЛЕВЫЙ ГРАФИК: C_y vs M для разных α
+for i, angle in enumerate(angles):
+    col = f'alpha_{angle}'
+    
+    ax1.plot(data['Mach'], data[col], 
+             color=colors[i % len(colors)], 
+             linewidth=2,
+             linestyle='-',
+             label=fr'$\alpha = {angle}^\circ$')
+
+ax1.set_xlabel('M', fontsize=15)
+ax1.set_ylabel(r'$C_y\text{из.кр}$', fontsize=16)
+ax1.grid(True, alpha=0.3)
+ax1.legend(loc='upper right', fontsize=10)
+
+# ПРАВЫЙ ГРАФИК: C_y vs α для разных M
+selected_mach = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+
+print(f"Выбранные числа Маха: {selected_mach}")
+
+# Строим правый график
+for j, mach in enumerate(selected_mach):
+    # Находим ближайшее число Маха в данных
+    idx = (data['Mach'] - mach).abs().idxmin()
+    closest_mach = data['Mach'].iloc[idx]
+    
+    # Данные
+    mach_data = data.iloc[idx]
+    cy_values = []
+    for angle in angles:
+        col = f'alpha_{angle}'
+        cy_values.append(mach_data[col])
+    
+    ax2.plot(angles, cy_values, 
+             color=mach_colors[j % len(mach_colors)], 
+             linewidth=2, 
+             linestyle='-',
+             marker='o',
+             markersize=5,
+             label=fr'$M = {mach}$')
+
+ax2.set_xlabel('$\\alpha$', fontsize=16)
+ax2.set_ylabel(r'$C_y\text{из.кр}$', fontsize=16)
+ax2.grid(True, alpha=0.3)
+ax2.legend(loc='upper left', fontsize=10) 
+
+# Добавляем линию при α = 0 для наглядности
+ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
+
+plt.tight_layout()
+plt.savefig('isolated_wing_aerodynamics.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+# Чтение данных для изолированного крыла
+data = pd.read_csv('krylo_isP_Intrf.csv')
+
+# Создание фигуры с двумя графиками бок о бок
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
+
+# Цвета для графиков
+colors = ['black', 'blue', 'green', 'orange', 'red', 'purple']
+mach_colors = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'cyan', 'magenta']
+
+angles = [-10, -5, 0, 5, 10]
+
+# ЛЕВЫЙ ГРАФИК: C_y vs M для разных α
+for i, angle in enumerate(angles):
+    col = f'alpha_{angle}'
+    
+    ax1.plot(data['Mach'], data[col], 
+             color=colors[i % len(colors)], 
+             linewidth=2,
+             linestyle='-',
+             label=fr'$\alpha = {angle}^\circ$')
+
+ax1.set_xlabel('M', fontsize=15)
+ax1.set_ylabel(r'$C_y\text{из.кр}$', fontsize=16)
+ax1.grid(True, alpha=0.3)
+ax1.legend(loc='upper right', fontsize=10)
+
+# ПРАВЫЙ ГРАФИК: C_y vs α для разных M
+selected_mach = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+
+print(f"Выбранные числа Маха: {selected_mach}")
+
+# Строим правый график
+for j, mach in enumerate(selected_mach):
+    # Находим ближайшее число Маха в данных
+    idx = (data['Mach'] - mach).abs().idxmin()
+    closest_mach = data['Mach'].iloc[idx]
+    
+    # Данные
+    mach_data = data.iloc[idx]
+    cy_values = []
+    for angle in angles:
+        col = f'alpha_{angle}'
+        cy_values.append(mach_data[col])
+    
+    ax2.plot(angles, cy_values, 
+             color=mach_colors[j % len(mach_colors)], 
+             linewidth=2, 
+             linestyle='-',
+             marker='o',
+             markersize=5,
+             label=fr'$M = {mach}$')
+
+ax2.set_xlabel('$\\alpha$', fontsize=16)
+ax2.set_ylabel(r'$C_y\text{из.кр}$', fontsize=16)
+ax2.grid(True, alpha=0.3)
+ax2.legend(loc='upper left', fontsize=10) 
+
+# Добавляем линию при α = 0 для наглядности
+ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
+
+plt.tight_layout()
+plt.savefig('isolated_wing_aerodynamics.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+
+
+# Вывод информации о данных
+print(f"Диапазон чисел Маха: от {data['Mach'].min()} до {data['Mach'].max()}")
+print(f"Количество точек по M: {len(data)}")
