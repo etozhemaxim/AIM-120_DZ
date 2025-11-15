@@ -1,7 +1,8 @@
 import AeroBDSM
 import math
 import csv
-
+import numpy as np
+from tqdm import tqdm
 class ProbabilityIntegral:
     def __init__(self):
         # Полная таблица значений Φ(x) с исправленными опечатками
@@ -113,35 +114,59 @@ l_II = 0.5808  # размах руля м
 k_aa_t = pow(1 + 0.41 * D_bar, 2)
 K_aa_t = pow(1 + D_bar, 2)
 eta_k = 1 # обратное суженеие
-eta_k_rl = 1
+
 b_b = 0.2    #бортовая хорда
-b_b_rl = 0.316
+
 L_xv = 1.701  #длина хвостовой части(от конца бортовой хорды до конца короче)
-L_xv_rl = 1.701
+
 c = 0.004 # толщина профиля
 x_b = 1 #??????? что это ? стр.162
 L_1 = x_b + ( b_b/ 2)
-L_1_rl = x_b + ( b_b_rl/ 2)
 nu = 15.1*1e-6 #кин. кэф. вязкости воздуха стр.162
 L1_bar=L_1/D
-L1_bar_rl=L_1_rl/D
 x_M = 1 #откуда??
+y_v = 1.0
 
 #для рулей: 
-
-# Параметры для функции get_c_y_alpha_IsP
-lambda_kr = 2.49  # удлинение несущей поверхности
+eta_k_rl = 1
+b_b_rl = 0.316
+L_xv_rl = 1.701
+L_1_rl = x_b + ( b_b_rl/ 2)
+L1_bar_rl=L_1_rl/D
 lambda_rl = 2.805
 chi_05_rl = 0.420
+zeta_rl = 0.0348
+
+#для  get_psi_eps:
+M_values = np.linspace(0,4.1,36)
+
+alpha_p_values = np.linspace(0,0.436332,10) #от 0 до +25 градусов
+
+phi_alpha_values = np.linspace(0, 0.436332, 10) #от 0 до +25 градусов
+
+psi_I_values = np.linspace(0, 0.436332, 10) #от 0 до +25 градусов
+
+psi_II_values = np.linspace(0, 0.436332, 10) #от 0 до +25 градусов
+
+x_zI_II = 1
+d_II = D
+l_1c_II = 0.231
+zeta_II  = zeta_rl
+b_b_II = 0.316
+chi_0_II =0.420
+
+
+
+
+lambda_kr = 2.49  # удлинение несущей поверхности
 chi_05_kr = 0.510  # угол стреловидности по линии середин хорд, рад
 bar_c_kr = 0.224  # относительная толщина профиля 
 zeta_kr = 0.2  # обратное сужение несущей поверхности 
-zeta_rl = 0.0348
 # Дополнительные параметры
 b_kr = 0.1  # Хорда крыла, м
 b_op = 0.025  # Хорда оперения, м
 l_raszmah = 0.144  # Размах крыла, м
-l_raszmah_op = 0.066  # Размах оперения, м
+l_raszmah_rl = 0.651  # Размах оперения, м
 
 # Площади поверхностей
 S_Kons = 4 * 0.03375 * 0.008  # Площадь консолей крыла, м²
@@ -150,7 +175,7 @@ S_op = 2 * 0.033 * 0.025  # Площадь оперения, м²
 # Расчетные параметры крыльевых поверхностей
 l_raszmah_kons = l_raszmah - D  # Размах консоли крыла
 lamb = pow(l_raszmah_kons, 2.0) / S_Kons  # Удлинение крыла
-lamb_op = pow(l_raszmah_op, 2.0) / (S_op + pow(b_kr, 2.0))  # Удлинение оперения
+lamb_op = pow(l_raszmah_rl, 2.0) / (S_op + pow(b_kr, 2.0))  # Удлинение оперения
 
 # Итоговые параметры
 S_f = 2.0 * pi * D * (l_f - D / 2.0) + 2.0 * pi * pow(D / 2.0, 2.0)  # Площадь поверхности фюзеляжа, м²
@@ -382,8 +407,64 @@ def main():
             
             M += 0.1
 
+            #Учет скоса потока
+    with open('z_b_v.csv', 'w', newline='') as file8:
+        writer8 = csv.writer(file8)
+        header8 = ['Mach', 'z_b'] 
+        writer8.writerow(header8)
+        M = 0.5
+        while M <= 4.1:
+            result8 = AeroBDSM.get_bar_z_v(M, lambda_kr, chi_05_kr, zeta_kr)
+            if result8.ErrorCode == 0:
+                z_b = result8.Value 
+                row = [M, z_b]
+                writer8.writerow(row)
+            M += 0.1
 
 
+    # Учет скоса потока - расчет i_v
+    with open('i_v.csv', 'w', newline='') as file9:
+        writer9 = csv.writer(file9)
+        header9 = ['Mach', 'i_v'] 
+        writer9.writerow(header9)
+        M = 0.5
+        while M <= 4.1:
+            # Сначала получаем z_b для текущего M
+            result8 = AeroBDSM.get_bar_z_v(M, lambda_kr, chi_05_kr, zeta_kr)
+            if result8.ErrorCode == 0:
+                z_b = result8.Value
+                # Затем рассчитываем i_v с полученным z_b
+                result9 = AeroBDSM.get_i_v(zeta_rl, D, l_raszmah_rl, y_v, z_b)
+                if result9.ErrorCode == 0:
+                    i_v = result9.Value 
+                    row = [M, i_v]
+                    writer9.writerow(row)
+            M += 0.1
+
+
+with open('psi_eps.csv', 'w', newline='') as file10:
+    writer10 = csv.writer(file10)
+    header10 = ['Mach', 'alpha_p','phi_alpha','psi_I','psi_II','z_v', 'psi_eps'] 
+    writer10.writerow(header10)
+    total_iterations = len(psi_II_values) * len(psi_I_values) * len(phi_alpha_values) * len(alpha_p_values) * len(M_values)
+
+    with tqdm(total=total_iterations, desc="Расчет psi_eps") as pbar:
+        for psi_II in psi_II_values:
+            for psi_I in psi_I_values:
+                for phi_alpha in phi_alpha_values:
+                    for alpha_p in alpha_p_values:
+                        for M in M_values:
+                            result8 = AeroBDSM.get_bar_z_v(M, lambda_kr, chi_05_kr, zeta_kr)
+                            if result8.ErrorCode == 0:
+                                z_v = result8.Value
+                                result10 = AeroBDSM.get_psi_eps(M, alpha_p, phi_alpha,
+                                    psi_I, psi_II, z_v, y_v, x_zI_II, d_II,
+                                    l_1c_II, zeta_II, b_b_II, chi_0_II)
+                                if result10.ErrorCode == 0:
+                                    psi_eps = result10.Value
+                                    row = [M, alpha_p, phi_alpha, psi_I, psi_II, z_v, psi_eps]
+                                    writer10.writerow(row)    
+                            pbar.update(1)                        
 
 if __name__ == "__main__":
     main()

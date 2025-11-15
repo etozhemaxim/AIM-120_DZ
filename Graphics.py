@@ -463,7 +463,139 @@ plt.tight_layout()
 plt.show()
 
 
+data = pd.read_csv('z_b_v.csv')
 
+# Создание фигуры с одним графиком
+fig, ax = plt.subplots(1, 1, figsize=(12, 8))
+
+# Цвета для графиков
+colors = ['black', 'blue', 'green', 'orange', 'red', 'purple']
+
+# ГРАФИК: z_b vs M
+ax.plot(data['Mach'], data['z_b'], 
+        color='blue', 
+        linewidth=2,
+        linestyle='-',
+        marker='s',
+        markersize=4
+)
+
+ax.set_xlabel('M', fontsize=15)
+ax.set_ylabel(r'$\bar{z}_\text{В}$', fontsize=16)
+ax.grid(True, alpha=0.3)
+ax.legend(loc='best', fontsize=12)
+
+plt.tight_layout()
+plt.show()
+
+
+
+data = pd.read_csv('i_v.csv')
+
+# Создание фигуры с одним графиком
+fig, ax = plt.subplots(1, 1, figsize=(12, 8))
+
+# Цвета для графиков
+colors = ['black', 'blue', 'green', 'orange', 'red', 'purple']
+
+# ГРАФИК: z_b vs M
+ax.plot(data['Mach'], data['i_v'], 
+        color='red', 
+        linewidth=2,
+        linestyle='-',
+        marker='s',
+        markersize=4
+)
+
+ax.set_xlabel('M', fontsize=15)
+ax.set_ylabel(r'$i_\text{В}$', fontsize=20)
+ax.grid(True, alpha=0.3)
+ax.legend(loc='best', fontsize=12)
+
+plt.tight_layout()
+plt.show()
+
+
+
+
+
+data = pd.read_csv('psi_eps.csv')
+
+# Создание фигур с графиками
+fig1, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(20, 16))
+fig2, (ax5, ax6) = plt.subplots(1, 2, figsize=(20, 8))
+
+# Цвета для графиков
+colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'cyan', 'magenta']
+
+# 1. График: psi_eps vs Mach
+unique_mach = data['Mach'].unique()
+if len(unique_mach) > 0:
+    mach_avg = data.groupby('Mach')['psi_eps'].mean()
+    ax1.plot(mach_avg.index, mach_avg.values, 
+             color='blue', linewidth=2, marker='o', markersize=4)
+    ax1.set_xlabel('M', fontsize=14)
+    ax1.set_ylabel(r'$\psi_{\varepsilon}$', fontsize=16)
+    ax1.set_title(r'Зависимость $\psi_{\varepsilon}$ от числа Маха', fontsize=14)
+    ax1.grid(True, alpha=0.3)
+
+# 2. График: psi_eps vs alpha_p
+unique_alpha_p = data['alpha_p'].unique()
+if len(unique_alpha_p) > 0:
+    alpha_p_avg = data.groupby('alpha_p')['psi_eps'].mean()
+    ax2.plot(alpha_p_avg.index, alpha_p_avg.values, 
+             color='red', linewidth=2, marker='s', markersize=4)
+    ax2.set_xlabel(r'$\alpha_p$', fontsize=14)
+    ax2.set_ylabel(r'$\psi_{\varepsilon}$', fontsize=16)
+    ax2.set_title(r'Зависимость $\psi_{\varepsilon}$ от $\alpha_p$', fontsize=14)
+    ax2.grid(True, alpha=0.3)
+
+# 3. График: psi_eps vs phi_alpha
+unique_phi_alpha = data['phi_alpha'].unique()
+if len(unique_phi_alpha) > 0:
+    phi_alpha_avg = data.groupby('phi_alpha')['psi_eps'].mean()
+    ax3.plot(phi_alpha_avg.index, phi_alpha_avg.values, 
+             color='green', linewidth=2, marker='^', markersize=4)
+    ax3.set_xlabel(r'$\varphi_{\alpha}$', fontsize=14)
+    ax3.set_ylabel(r'$\psi_{\varepsilon}$', fontsize=16)
+    ax3.set_title(r'Зависимость $\psi_{\varepsilon}$ от $\varphi_{\alpha}$', fontsize=14)
+    ax3.grid(True, alpha=0.3)
+
+# 4. График: psi_eps vs psi_I
+unique_psi_I = data['psi_I'].unique()
+if len(unique_psi_I) > 0:
+    psi_I_avg = data.groupby('psi_I')['psi_eps'].mean()
+    ax4.plot(psi_I_avg.index, psi_I_avg.values, 
+             color='orange', linewidth=2, marker='d', markersize=4)
+    ax4.set_xlabel(r'$\psi_I$', fontsize=14)
+    ax4.set_ylabel(r'$\psi_{\varepsilon}$', fontsize=16)
+    ax4.set_title(r'Зависимость $\psi_{\varepsilon}$ от $\psi_I$', fontsize=14)
+    ax4.grid(True, alpha=0.3)
+
+# 5. График: psi_eps vs psi_II
+unique_psi_II = data['psi_II'].unique()
+if len(unique_psi_II) > 0:
+    psi_II_avg = data.groupby('psi_II')['psi_eps'].mean()
+    ax5.plot(psi_II_avg.index, psi_II_avg.values, 
+             color='purple', linewidth=2, marker='v', markersize=4)
+    ax5.set_xlabel(r'$\psi_{II}$', fontsize=14)
+    ax5.set_ylabel(r'$\psi_{\varepsilon}$', fontsize=16)
+    ax5.set_title(r'Зависимость $\psi_{\varepsilon}$ от $\psi_{II}$', fontsize=14)
+    ax5.grid(True, alpha=0.3)
+
+# 6. График: psi_eps vs z_v
+unique_z_v = data['z_v'].unique()
+if len(unique_z_v) > 0:
+    z_v_avg = data.groupby('z_v')['psi_eps'].mean()
+    ax6.plot(z_v_avg.index, z_v_avg.values, 
+             color='brown', linewidth=2, marker='*', markersize=6)
+    ax6.set_xlabel(r'$z_\text{В}$', fontsize=14)
+    ax6.set_ylabel(r'$\psi_{\varepsilon}$', fontsize=16)
+    ax6.set_title(r'Зависимость $\psi_{\varepsilon}$ от $z_\text{В}$', fontsize=14)
+    ax6.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
 
 
 

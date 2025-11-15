@@ -760,6 +760,61 @@ S_\text{рл} = 4 \cdot 1/2 \cdot  (0.316 + 0.011 ) \cdot 0.231  = 0.15107 {\tex
 \label{K_aa_rl}
 \end{figure}
 
+\subsection{Учёт скоса потока}
+
+Определяя подъемную силу летательного аппарата, необходимо учитывать не только интерференцию корпуса и несущих поверхностей, но и влияние передних поверхностей на задние. Это влияние объясняется тем, что передние несущие поверхности, будучи установлены под углом атаки, отбрасывают набегающие частицы воздуха в сторону, обратную вектору подъёмной силы. В результате происходит изменение направления потока, или \textit{скос потока}.
+
+Поскольку местные углы скоса потока $\varepsilon$ неодинаковы вдоль размаха задней несущей поверхности, то целесообразно ввести понятие \textit{среднего угла скоса потока} $\varepsilon_{cp}$. Это — условный, постоянный по размаху угол скоса потока, вызывающий тот же эффект, что и действительное поле углов $\varepsilon$.
+
+При малых углах атаки угол $\varepsilon_{cp}$ пропорционален $\alpha$:
+
+\begin{equation}
+\varepsilon_{cp} \approx \varepsilon_{cp}^{\alpha} \alpha.
+\end{equation}
+
+Производная $\varepsilon_{cp}^{\alpha}$ определяется выражением
+
+\begin{equation}
+\varepsilon_{cp}^{\alpha} = \frac{57.3}{2\pi} \frac{i_\text{В}}{\bar{z}_\text{В}} \frac{l_{kI}}{l_{kII}} \left( \frac{c_{y1\text{из.кр}}^{\alpha}}{\lambda_k} \right)_I \frac{k_{\alpha \alpha I}}{K_{\alpha \alpha II}} \psi_{\varepsilon}.
+\end{equation}
+
+Здесь $\bar{z}_\text{В}$ — относительная координата вихря, т.~е. расстояние от борта корпуса до вихря, отнесенное к размаху одной передней консоли. $l_{kI}$ и $l_{kII}$ -- размах крыльев и рулей соответственно.
+
+Зависимость $\bar{z}_\text{В}$ от $M$ представлена на рисунке \ref{z_v}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textheight]{images/z_v.png}
+\caption{Зависимость $\bar{z}_\text{В}$ от $M$}
+\label{z_v}
+\end{figure}
+
+Зависимость $i_\text{В}$ от $M$ представлена на рисунке \ref{i_v}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textheight]{images/i_v.png}
+\caption{ависимость $i_\text{В}$ от $M$}
+\label{i_v}
+\end{figure}
+
+Зависимость $\psi_\epsilon$ от $\psi_\mathrm{II}$ и $z_\text{В}$ представлена на рисунке \ref{psi_eps_1}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textheight]{images/psi_eps_1.png}
+\caption{Зависимость $\psi_\epsilon$ от $\psi_\mathrm{II}$ и $z_\text{В}$}
+\label{psi_eps_1}
+\end{figure}
+
+Зависимость $\psi_\epsilon$ от $\psi_\mathrm{I}$, $\alpha_\text{п}$, $M$ и $\varphi_\alpha$ представлена на рисунке \ref{psi_eps_2}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.77\textheight]{images/psi_eps_2.png}
+\caption{Зависимость $\psi_\epsilon$ от $\psi_\mathrm{I}$, $\alpha_\text{п}$, $M$ и $\varphi_\alpha$}
+\label{psi_eps_2}
+\end{figure}
 
 \section{Расчёт $c_x$}
 
