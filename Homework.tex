@@ -575,25 +575,191 @@ S_\text{кр} = 4 \cdot \frac{l}{2} \cdot b_\text{б} \cdot 0.5 = 4 \cdot 0.249 
 \label{C_y_iz.kr}
 \end{figure}
 
-Взаимное влияние несущей поверхности с фюзеляжем определяется коэффициентом интерференции $K_{\alpha \alpha}$
+Взаимное влияние несущей поверхности с фюзеляжем определяется коэффициентом интерференции $K_{\alpha \alpha}$. При этом при $M\geq 1$ данный коэффицент определяется зависимостью \ref{K_aa}.
+
+\begin{equation}
+\label{K_aa}
+K_{\alpha \alpha} = \left[ k^*_{\alpha \alpha} + (K^*_{\alpha \alpha} - k^*_{\alpha \alpha}) F(L_{\text{хв}}) \right] x_{\text{п.с}} x_{\text{М}} x_{\text{нос}},
+\end{equation}
+где 
+\begin{equation}
+k^*_{\alpha \alpha} = (K_{\alpha \alpha})_{\text{теор}} \frac{1 + 3\bar{D} -1 \frac{1}{\eta_\text{к}}\bar{D}(1-\bar{D})}{(1 + \bar{D})^2}
+\end{equation}
+
+\begin{equation}
+K^*_{\alpha \alpha} = 1 + 3\bar{D} -1 \frac{\bar{D}(1-\bar{D})}{\eta_\text{к}}
+\end{equation}
+
+\begin{equation}
+F(L_{\text{хв}}) = 1 - \frac{\sqrt{\pi}}{2\bar{b}_\text{б}\sqrt{2c}} \left[ \Phi [(\bar{b_\text{б}} + \bar{L_\text{хв}}) \sqrt{2c}] - \Phi [\bar{L_\text{xв}} \sqrt{2c}] \right]
+\end{equation}
+
+Здесь $\Phi[z]$ --- функция Лапласа-Гаусса от аргумента $z$, определяемая по таблицам *.
+
+\begin{equation}
+\bar{b}_\text{б} = \frac{b_\text{б}}{\frac{\pi}{2}D \sqrt{M^2-1}}
+\end{equation}
+
+\begin{equation}
+\bar{L}_\text{xв} = \frac{L_\text{xв}}{\frac{\pi}{2}D \sqrt{M^2-1}}
+\end{equation}
+
+
+\begin{equation}
+x_{\text{п.с}} = (1-\frac{2\bar{D}^2}{1-\bar{D}^2}\bar{\delta}^*)\left[  1 - \frac{\bar{D}(\eta_\text{к}-1)}{(1-\bar{D})(\eta_\text{к}+1)}\bar{\delta}^*\right]
+\end{equation}
+
+\begin{equation}
+\bar{\delta}^* = \frac{0.093}{(\frac{V L_1}{\nu})^\frac{1}{5}} \frac{L_1}{D} (1 + 0.4M + 0.147M^2- 0.006M^3),
+\end{equation}
+где $\nu$-- кинематический коэффициент вязкости воздуха.
+
+\begin{equation}
+x_\text{нос} \approx 0.6+0.4(1-e^{-0.5\bar{L}_1})
+\end{equation}
 
 \begin{equation}
 \label{K}
 (K_{\alpha \alpha})_{\text{теор}} = (1 + \bar{D})^2
 \end{equation}
 
+При $M<1$ выражение \ref{K_aa} принимает вид
+\begin{equation}
+K_{\alpha \alpha} = K^*_{\alpha \alpha} x_{\text{п.с}} x_{\text{М}} x_{\text{нос}},
+\end{equation}
+
+Коэффициент $k_{\alpha \alpha}$ во всех случаях подсчитывается по формуле
+
+\begin{equation}
+k_{\alpha \alpha} = k^*_{\alpha \alpha} x_{\text{п.с}} x_{\text{М}} x_{\text{нос}},
+\end{equation}
+
+
 \[
-(K_{\alpha \alpha})_{\text{теор}} = (1 + \bar{0.6952})^2 = 2.873
+(K_{\alpha \alpha})_{\text{теор}} = (1 + 0.6952)^2 = 2.873
 \]
 
-Таким образом, влияние интерференции представлено на графике \ref{C_y_iz.kr_Intrf}.
+Ниже в таблице \ref{M=2} представлены промежуточные результаты некоторых величин для $M=2$.
+
+\begin{table}[h]
+\centering
+\caption{Расчетные параметры интерференции}
+\begin{tabular}{|c|c|}
+\hline
+Величина & Значение \\
+\hline
+$\bar{b}_\text{б}$ & 0.413 \\
+\hline
+$\bar{L}_\text{xв}$ & 3.512 \\
+\hline
+$F(L_{\text{хв}})$ & 0.329 \\
+\hline
+$\bar{\delta}^*$ & 0.039 \\
+\hline
+$x_{\text{п.с}}$ & 0.996 \\
+\hline
+$x_{\text{нос}}$ & 0.982 \\
+\hline
+$k^*_{\alpha \alpha}$ & 1.093 \\
+\hline
+$K^*_{\alpha \alpha}$ & 1.093 \\
+\hline
+$(K_{\alpha \alpha})_{\text{теор}}$ & 2.873 \\
+\hline
+\end{tabular}
+\label{M=2}
+\end{table}
+
+На рисунке \ref{K_aa} представлена зависимость $K_{\alpha \alpha }$ для крыльев от $M$ И $\alpha$.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textheight]{images/C_y_iz.kr_Intrf.png}
-\caption{График зависимости $c_{y\text{из.кр}}$ с учетом интерференции}
-\label{C_y_iz.kr_Intrf}
+\includegraphics[width=0.7\textheight]{images/K_aa.png}
+\caption{Зависимость $K_{\alpha \alpha \text{кр}}$ от $M$ и $\alpha$}
+\label{K_aa}
 \end{figure}
+
+\subsection{Рули}
+
+Вводные данные представлены в таблице \ref{tab:fins}.
+
+\begin{table}[h]
+\centering
+\caption{Вводные параметры}
+\label{tab:fins}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Параметр} & \textbf{Значение} & \textbf{Единица измерения} \\ 
+\hline
+Размах руля $l_{I\text{рл}}$ & 0.651 & м \\
+\hline
+Полуразмах руля $l_{I\text{рл}}/2$ & 0.325 & м \\
+\hline
+Центральная хорда $b_{0\text{рл}}$ & 0.4& м\\
+\hline
+Бортовая хорда $b_{б\text{рл}}$ & 0.316 & м\\
+\hline
+Концевая хорда $b_\text{к}$ & 0.011 & м\\
+\hline
+Угол стреловидности по линии середин хорд $\chi_{0.5\text{рл}}$ & 0.420 & рад\\
+\hline
+Угол стреловидности $\chi_\text{рл}$ & 0.729 & рад\\
+\hline
+Толщина профиля руля $c_\text{рл}$ & 0.004 & м\\
+\hline
+Обратное сужение руля $\zeta_\text{рл}$ & 5 & - \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.55\textheight]{images/fins.png}
+\caption{Схема рулей AIM-120}
+\label{fins}
+\end{figure}
+
+Площадь рулей $S_\text{рл}$ вычисляется по формуле \ref{S_rl}: 
+
+\begin{equation}
+\label{S_rl}
+S_\text{рл} = 4 \cdot 1/2 \cdot (b_\text{рл} + \cdot b_\text{к}) \cdot 0.231  
+\end{equation}
+
+\[
+S_\text{рл} = 4 \cdot 1/2 \cdot  (0.316 + 0.011 ) \cdot 0.231  = 0.15107 {\text{ м}^2}
+\]
+
+Удлинение крыла $\lambda_\text{рл}$ определяется формулой \ref{zalupa}. 
+
+\begin{equation}
+\label{zalupa}
+\lambda_\text{рл} = \frac{l_\text{рл}^2}{S_\text{рл}} 
+\end{equation}
+
+\[
+\lambda_\text{рл} =  \frac{0.651^2}{0.15107} = 2.805
+\]
+
+На рисунке \ref{C_y_iz.rl} представлена зависимость $c^\alpha_{y\text{из.рл}}$ от $M$ и $\alpha$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textheight]{images/C_y_iz.rl.png}
+\caption{График зависимости $c^\alpha_{y\text{из.рл}}$}
+\label{C_y_iz.rl}
+\end{figure}
+
+На рисунке \ref{K_aa_rl} представлена зависимость $K_{\alpha \alpha \text{рл} }$ для крыльев от $M$ И $\alpha$.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textheight]{images/K_aa_rl.png}
+\caption{Зависимость $K_{\alpha \alpha \text{рл}}$ от $M$ и $\alpha$}
+\label{K_aa_rl}
+\end{figure}
+
 
 \section{Расчёт $c_x$}
 

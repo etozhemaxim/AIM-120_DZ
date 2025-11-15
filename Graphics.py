@@ -132,7 +132,6 @@ ax2.legend(loc='upper left', fontsize=10)
 ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
 
 plt.tight_layout()
-plt.savefig('comprehensive_aerodynamics_with_kappa.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 
@@ -198,7 +197,6 @@ ax2.legend(loc='upper left', fontsize=10)
 ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
 
 plt.tight_layout()
-plt.savefig('isolated_wing_aerodynamics.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # Чтение данных для изолированного крыла
@@ -263,8 +261,210 @@ ax2.legend(loc='upper left', fontsize=10)
 ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
 
 plt.tight_layout()
-plt.savefig('isolated_wing_aerodynamics.png', dpi=300, bbox_inches='tight')
 plt.show()
+
+
+
+
+# Чтение данных для изолированного крыла
+data = pd.read_csv('Kappa_aa_kr.csv')
+
+# Создание фигуры с двумя графиками бок о бок
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
+
+# Цвета для графиков
+colors = ['black', 'blue', 'green', 'orange', 'red', 'purple']
+mach_colors = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'cyan', 'magenta']
+
+angles = [-10, -5, 0, 5, 10]
+
+# ЛЕВЫЙ ГРАФИК: C_y vs M для разных α
+for i, angle in enumerate(angles):
+    col = f'alpha_{angle}'
+    
+    ax1.plot(data['Mach'], data[col], 
+             color=colors[i % len(colors)], 
+             linewidth=2,
+             linestyle='-',
+             label=fr'$\alpha = {angle}^\circ$')
+
+ax1.set_xlabel('M', fontsize=15)
+ax1.set_ylabel(r'$K_{\alpha \alpha \text{кр}}$', fontsize=16)
+ax1.grid(True, alpha=0.3)
+ax1.legend(loc='upper right', fontsize=10)
+
+# ПРАВЫЙ ГРАФИК: C_y vs α для разных M
+selected_mach = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+
+print(f"Выбранные числа Маха: {selected_mach}")
+
+# Строим правый график
+for j, mach in enumerate(selected_mach):
+    # Находим ближайшее число Маха в данных
+    idx = (data['Mach'] - mach).abs().idxmin()
+    closest_mach = data['Mach'].iloc[idx]
+    
+    # Данные
+    mach_data = data.iloc[idx]
+    cy_values = []
+    for angle in angles:
+        col = f'alpha_{angle}'
+        cy_values.append(mach_data[col])
+    
+    ax2.plot(angles, cy_values, 
+             color=mach_colors[j % len(mach_colors)], 
+             linewidth=2, 
+             linestyle='-',
+             marker='o',
+             markersize=5,
+             label=fr'$M = {mach}$')
+
+ax2.set_xlabel('$\\alpha$', fontsize=16)
+ax2.set_ylabel(r'$K_{\alpha \alpha text{кр}}$', fontsize=16)
+ax2.grid(True, alpha=0.3)
+ax2.legend(loc='upper left', fontsize=10) 
+
+# Добавляем линию при α = 0 для наглядности
+ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
+
+plt.tight_layout()
+plt.show()
+
+
+
+data = pd.read_csv('rul_isP.csv')
+
+# Создание фигуры с двумя графиками бок о бок
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
+
+# Цвета для графиков
+colors = ['black', 'blue', 'green', 'orange', 'red', 'purple']
+mach_colors = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'cyan', 'magenta']
+
+angles = [-10, -5, 0, 5, 10]
+
+# ЛЕВЫЙ ГРАФИК: C_y vs M для разных α
+for i, angle in enumerate(angles):
+    col = f'alpha_{angle}'
+    
+    ax1.plot(data['Mach'], data[col], 
+             color=colors[i % len(colors)], 
+             linewidth=2,
+             linestyle='-',
+             label=fr'$\alpha = {angle}^\circ$')
+
+ax1.set_xlabel('M', fontsize=15)
+ax1.set_ylabel(r'$C^\alpha_y\text{из.рл}$', fontsize=16)
+ax1.grid(True, alpha=0.3)
+ax1.legend(loc='upper right', fontsize=10)
+
+# ПРАВЫЙ ГРАФИК: C_y vs α для разных M
+selected_mach = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+
+print(f"Выбранные числа Маха: {selected_mach}")
+
+# Строим правый график
+for j, mach in enumerate(selected_mach):
+    # Находим ближайшее число Маха в данных
+    idx = (data['Mach'] - mach).abs().idxmin()
+    closest_mach = data['Mach'].iloc[idx]
+    
+    # Данные
+    mach_data = data.iloc[idx]
+    cy_values = []
+    for angle in angles:
+        col = f'alpha_{angle}'
+        cy_values.append(mach_data[col])
+    
+    ax2.plot(angles, cy_values, 
+             color=mach_colors[j % len(mach_colors)], 
+             linewidth=2, 
+             linestyle='-',
+             marker='o',
+             markersize=5,
+             label=fr'$M = {mach}$')
+
+ax2.set_xlabel('$\\alpha$', fontsize=16)
+ax2.set_ylabel(r'$C^\alpha_y\text{из.рл}$', fontsize=16)
+ax2.grid(True, alpha=0.3)
+ax2.legend(loc='upper left', fontsize=10) 
+
+# Добавляем линию при α = 0 для наглядности
+ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
+
+plt.tight_layout()
+plt.show()
+
+
+
+
+# Чтение данных для изолированного крыла
+data = pd.read_csv('Kappa_aa_rl.csv')
+
+# Создание фигуры с двумя графиками бок о бок
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
+
+# Цвета для графиков
+colors = ['black', 'blue', 'green', 'orange', 'red', 'purple']
+mach_colors = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'cyan', 'magenta']
+
+angles = [-10, -5, 0, 5, 10]
+
+# ЛЕВЫЙ ГРАФИК: C_y vs M для разных α
+for i, angle in enumerate(angles):
+    col = f'alpha_{angle}'
+    
+    ax1.plot(data['Mach'], data[col], 
+             color=colors[i % len(colors)], 
+             linewidth=2,
+             linestyle='-',
+             label=fr'$\alpha = {angle}^\circ$')
+
+ax1.set_xlabel('M', fontsize=15)
+ax1.set_ylabel(r'$K_{\alpha \alpha \text{рл}}$', fontsize=16)
+ax1.grid(True, alpha=0.3)
+ax1.legend(loc='upper right', fontsize=10)
+
+# ПРАВЫЙ ГРАФИК: C_y vs α для разных M
+selected_mach = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+
+print(f"Выбранные числа Маха: {selected_mach}")
+
+# Строим правый график
+for j, mach in enumerate(selected_mach):
+    # Находим ближайшее число Маха в данных
+    idx = (data['Mach'] - mach).abs().idxmin()
+    closest_mach = data['Mach'].iloc[idx]
+    
+    # Данные
+    mach_data = data.iloc[idx]
+    cy_values = []
+    for angle in angles:
+        col = f'alpha_{angle}'
+        cy_values.append(mach_data[col])
+    
+    ax2.plot(angles, cy_values, 
+             color=mach_colors[j % len(mach_colors)], 
+             linewidth=2, 
+             linestyle='-',
+             marker='o',
+             markersize=5,
+             label=fr'$M = {mach}$')
+
+ax2.set_xlabel('$\\alpha$', fontsize=16)
+ax2.set_ylabel(r'$K_{\alpha \alpha \text{рл}}$', fontsize=16)
+ax2.grid(True, alpha=0.3)
+ax2.legend(loc='upper left', fontsize=10) 
+
+# Добавляем линию при α = 0 для наглядности
+ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
+
+plt.tight_layout()
+plt.show()
+
+
+
+
 
 
 
