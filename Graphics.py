@@ -600,6 +600,199 @@ plt.show()
 
 
 
+
+
+data = pd.read_csv('eps_alpha_sr.csv')
+
+# Создание фигур с графиками
+fig1, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(20, 16))
+fig2, ((ax5, ax6), (ax7, ax8)) = plt.subplots(2, 2, figsize=(20, 16))
+
+# Цвета для графиков
+colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'cyan', 'magenta']
+
+# 1. График: eps_alpha_sr vs Mach
+unique_mach = data['Mach'].unique()
+if len(unique_mach) > 0:
+    mach_avg = data.groupby('Mach')['eps_alpha_sr'].mean()
+    ax1.plot(mach_avg.index, mach_avg.values, 
+             color='blue', linewidth=2, marker='o', markersize=4)
+    ax1.set_xlabel('M', fontsize=14)
+    ax1.set_ylabel(r'$\varepsilon_{\alpha}^{cp}$', fontsize=16)
+    ax1.set_title(r'Зависимость $\varepsilon_{\alpha}^{cp}$ от числа Маха', fontsize=14)
+    ax1.grid(True, alpha=0.3)
+
+# 2. График: eps_alpha_sr vs alpha_p
+unique_alpha_p = data['alpha_p'].unique()
+if len(unique_alpha_p) > 0:
+    alpha_p_avg = data.groupby('alpha_p')['eps_alpha_sr'].mean()
+    ax2.plot(alpha_p_avg.index, alpha_p_avg.values, 
+             color='red', linewidth=2, marker='s', markersize=4)
+    ax2.set_xlabel(r'$\alpha_p$', fontsize=14)
+    ax2.set_ylabel(r'$\varepsilon_{\alpha}^{cp}$', fontsize=16)
+    ax2.set_title(r'Зависимость $\varepsilon_{\alpha}^{cp}$ от $\alpha_p$', fontsize=14)
+    ax2.grid(True, alpha=0.3)
+
+# 3. График: eps_alpha_sr vs phi_alpha
+unique_phi_alpha = data['phi_alpha'].unique()
+if len(unique_phi_alpha) > 0:
+    phi_alpha_avg = data.groupby('phi_alpha')['eps_alpha_sr'].mean()
+    ax3.plot(phi_alpha_avg.index, phi_alpha_avg.values, 
+             color='green', linewidth=2, marker='^', markersize=4)
+    ax3.set_xlabel(r'$\phi_{\alpha}$', fontsize=14)
+    ax3.set_ylabel(r'$\varepsilon_{\alpha}^{cp}$', fontsize=16)
+    ax3.set_title(r'Зависимость $\varepsilon_{\alpha}^{cp}$ от $\phi_{\alpha}$', fontsize=14)
+    ax3.grid(True, alpha=0.3)
+
+# 4. График: eps_alpha_sr vs psi_I
+unique_psi_I = data['psi_I'].unique()
+if len(unique_psi_I) > 0:
+    psi_I_avg = data.groupby('psi_I')['eps_alpha_sr'].mean()
+    ax4.plot(psi_I_avg.index, psi_I_avg.values, 
+             color='orange', linewidth=2, marker='d', markersize=4)
+    ax4.set_xlabel(r'$\psi_I$', fontsize=14)
+    ax4.set_ylabel(r'$\varepsilon_{\alpha}^{cp}$', fontsize=16)
+    ax4.set_title(r'Зависимость $\varepsilon_{\alpha}^{cp}$ от $\psi_I$', fontsize=14)
+    ax4.grid(True, alpha=0.3)
+
+# 5. График: eps_alpha_sr vs psi_II
+unique_psi_II = data['psi_II'].unique()
+if len(unique_psi_II) > 0:
+    psi_II_avg = data.groupby('psi_II')['eps_alpha_sr'].mean()
+    ax5.plot(psi_II_avg.index, psi_II_avg.values, 
+             color='purple', linewidth=2, marker='v', markersize=4)
+    ax5.set_xlabel(r'$\psi_{II}$', fontsize=14)
+    ax5.set_ylabel(r'$\varepsilon_{\alpha}^{cp}$', fontsize=16)
+    ax5.set_title(r'Зависимость $\varepsilon_{\alpha}^{cp}$ от $\psi_{II}$', fontsize=14)
+    ax5.grid(True, alpha=0.3)
+
+# 6. График: eps_alpha_sr vs z_v
+unique_z_v = data['z_v'].unique()
+if len(unique_z_v) > 0:
+    z_v_avg = data.groupby('z_v')['eps_alpha_sr'].mean()
+    ax6.plot(z_v_avg.index, z_v_avg.values, 
+             color='brown', linewidth=2, marker='*', markersize=6)
+    ax6.set_xlabel(r'$z_v$', fontsize=14)
+    ax6.set_ylabel(r'$\varepsilon_{\alpha}^{cp}$', fontsize=16)
+    ax6.set_title(r'Зависимость $\varepsilon_{\alpha}^{cp}$ от $z_v$', fontsize=14)
+    ax6.grid(True, alpha=0.3)
+
+# 7. График: eps_alpha_sr vs psi_eps
+unique_psi_eps = data['psi_eps'].unique()
+if len(unique_psi_eps) > 0:
+    psi_eps_avg = data.groupby('psi_eps')['eps_alpha_sr'].mean()
+    ax7.plot(psi_eps_avg.index, psi_eps_avg.values, 
+             color='cyan', linewidth=2, marker='x', markersize=4)
+    ax7.set_xlabel(r'$\psi_{\varepsilon}$', fontsize=14)
+    ax7.set_ylabel(r'$\varepsilon_{\alpha}^{cp}$', fontsize=16)
+    ax7.set_title(r'Зависимость $\varepsilon_{\alpha}^{cp}$ от $\psi_{\varepsilon}$', fontsize=14)
+    ax7.grid(True, alpha=0.3)
+
+# 8. График: eps_alpha_sr vs i_v
+unique_i_v = data['i_v'].unique()
+if len(unique_i_v) > 0:
+    i_v_avg = data.groupby('i_v')['eps_alpha_sr'].mean()
+    ax8.plot(i_v_avg.index, i_v_avg.values, 
+             color='magenta', linewidth=2, marker='+', markersize=6)
+    ax8.set_xlabel(r'$i_v$', fontsize=14)
+    ax8.set_ylabel(r'$\varepsilon_{\alpha}^{cp}$', fontsize=16)
+    ax8.set_title(r'Зависимость $\varepsilon_{\alpha}^{cp}$ от $i_v$', fontsize=14)
+    ax8.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+# Дополнительно: статистика по данным
+print("Статистика по eps_alpha_sr:")
+print(f"Минимум: {data['eps_alpha_sr'].min():.6f}")
+print(f"Максимум: {data['eps_alpha_sr'].max():.6f}")
+print(f"Среднее: {data['eps_alpha_sr'].mean():.6f}")
+print(f"Стандартное отклонение: {data['eps_alpha_sr'].std():.6f}")
+
+# Графики для коэффициентов интерференции
+fig3, (ax9, ax10) = plt.subplots(1, 2, figsize=(20, 8))
+
+# 9. График: eps_alpha_sr vs k_aa
+unique_k_aa = data['k_aa'].unique()
+if len(unique_k_aa) > 0:
+    k_aa_avg = data.groupby('k_aa')['eps_alpha_sr'].mean()
+    ax9.plot(k_aa_avg.index, k_aa_avg.values, 
+             color='navy', linewidth=2, marker='o', markersize=4)
+    ax9.set_xlabel(r'$k_{\alpha\alpha}$', fontsize=14)
+    ax9.set_ylabel(r'$\varepsilon_{\alpha}^{cp}$', fontsize=16)
+    ax9.set_title(r'Зависимость $\varepsilon_{\alpha}^{cp}$ от $k_{\alpha\alpha}$', fontsize=14)
+    ax9.grid(True, alpha=0.3)
+
+# 10. График: eps_alpha_sr vs K_aa_rl
+unique_K_aa_rl = data['K_aa_rl'].unique()
+if len(unique_K_aa_rl) > 0:
+    K_aa_rl_avg = data.groupby('K_aa_rl')['eps_alpha_sr'].mean()
+    ax10.plot(K_aa_rl_avg.index, K_aa_rl_avg.values, 
+              color='darkred', linewidth=2, marker='s', markersize=4)
+    ax10.set_xlabel(r'$K_{\alpha\alpha}^{рл}$', fontsize=14)
+    ax10.set_ylabel(r'$\varepsilon_{\alpha}^{cp}$', fontsize=16)
+    ax10.set_title(r'Зависимость $\varepsilon_{\alpha}^{cp}$ от $K_{\alpha\alpha}^{рл}$', fontsize=14)
+    ax10.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+
+
+
+
+
+
+
+data = pd.read_csv('kappa_q_nos.csv')
+
+# Создание графика
+fig, ax = plt.subplots(figsize=(12, 8))
+
+# Построение графика
+ax.plot(data['Mach'], data['kappa_q'], 
+        color='blue', linewidth=2, marker='o', markersize=4,
+        label=r'$\kappa_q$')
+
+# Настройки графика
+ax.set_xlabel('M', fontsize=14)
+ax.set_ylabel(r'$\kappa_{q \text{нос}}$', fontsize=16)
+ax.set_title(r'Зависимость $\kappa_{q \text{нос}}$ от числа Маха', fontsize=16)
+ax.grid(True, alpha=0.3)
+ax.legend(loc='best', fontsize=12)
+
+# Добавление сетки
+ax.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+
+data = pd.read_csv('kappa_q.csv')
+
+# Создание графика
+fig, ax = plt.subplots(figsize=(12, 8))
+
+# Построение графика
+ax.plot(data['Mach'], data['kappa_q'], 
+        color='blue', linewidth=2, marker='o', markersize=4,
+        label=r'$\kappa_q$')
+
+# Настройки графика
+ax.set_xlabel('M', fontsize=14)
+ax.set_ylabel(r'$\kappa_q$', fontsize=16)
+ax.set_title(r'Зависимость $\kappa_q$ от числа Маха', fontsize=16)
+ax.grid(True, alpha=0.3)
+ax.legend(loc='best', fontsize=12)
+
+# Добавление сетки
+ax.grid(True, alpha=0.3)
+
+plt.tight_layout()
+plt.show()
+
+
+
 # Вывод информации о данных
 print(f"Диапазон чисел Маха: от {data['Mach'].min()} до {data['Mach'].max()}")
 print(f"Количество точек по M: {len(data)}")

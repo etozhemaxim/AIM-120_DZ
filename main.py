@@ -3,6 +3,8 @@ import math
 import csv
 import numpy as np
 from tqdm import tqdm
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning)
 class ProbabilityIntegral:
     def __init__(self):
         # Полная таблица значений Φ(x) с исправленными опечатками
@@ -97,7 +99,7 @@ phi = ProbabilityIntegral()
 
 # Глобальные переменные
 l_f = 3.906  # длина фюзеляжа м 
-M = 0.0
+# M = 0.0
 pi = math.pi
 D = 0.178  # диаметр миделя, м aka диаметр миделевого сечения корпуса, м
 D_I = 0.178  # диаметр корпуса в области передних консолей, м
@@ -136,7 +138,7 @@ L1_bar_rl=L_1_rl/D
 lambda_rl = 2.805
 chi_05_rl = 0.420
 zeta_rl = 0.0348
-
+#//////////////////////////////////////////////////////////
 #для  get_psi_eps:
 M_values = np.linspace(0,4.1,36)
 
@@ -155,7 +157,10 @@ zeta_II  = zeta_rl
 b_b_II = 0.316
 chi_0_II =0.420
 
+#/////////////////////////////////////////////
 
+k_aa_dict = {}
+K_aa_rl_dict = {}
 
 
 lambda_kr = 2.49  # удлинение несущей поверхности
@@ -165,17 +170,22 @@ zeta_kr = 0.2  # обратное сужение несущей поверхно
 # Дополнительные параметры
 b_kr = 0.1  # Хорда крыла, м
 b_op = 0.025  # Хорда оперения, м
-l_raszmah = 0.144  # Размах крыла, м
+l_raszmah_kr = 0.498  # Размах крыла, м
 l_raszmah_rl = 0.651  # Размах оперения, м
 
 # Площади поверхностей
 S_Kons = 4 * 0.03375 * 0.008  # Площадь консолей крыла, м²
 S_op = 2 * 0.033 * 0.025  # Площадь оперения, м²
 
-# Расчетные параметры крыльевых поверхностей
-l_raszmah_kons = l_raszmah - D  # Размах консоли крыла
-lamb = pow(l_raszmah_kons, 2.0) / S_Kons  # Удлинение крыла
-lamb_op = pow(l_raszmah_rl, 2.0) / (S_op + pow(b_kr, 2.0))  # Удлинение оперения
+L_A = 1
+
+b_A = 1.5
+
+
+# # Расчетные параметры крыльевых поверхностей
+# l_raszmah_kons = l_raszmah - D  # Размах консоли крыла
+# lamb = pow(l_raszmah_kons, 2.0) / S_Kons  # Удлинение крыла
+# lamb_op = pow(l_raszmah_rl, 2.0) / (S_op + pow(b_kr, 2.0))  # Удлинение оперения
 
 # Итоговые параметры
 S_f = 2.0 * pi * D * (l_f - D / 2.0) + 2.0 * pi * pow(D / 2.0, 2.0)  # Площадь поверхности фюзеляжа, м²
@@ -288,6 +298,7 @@ def main():
             if K_aa_zvz < 0 or M == 2.0000000000000004: 
                 print(f'K_aa_zvz = {K_aa_zvz:.3f}')
             
+            k_aa =  K_aa_zvz * x_ps * x_M * x_nos
             if M >=1 :
                 K_aa = (k_aa_zvz + (K_aa_zvz - k_aa_zvz) * F_L_xv) * x_ps * x_M * x_nos
             else:
@@ -359,44 +370,44 @@ def main():
             if b_b_bar_rl < 0 or M ==2.0000000000000004  : 
                 print(f'b_b_bar_rl = {b_b_bar_rl:.3f}')
 
-            L_xv_bar_rl = (L_xv/ ((math.pi/2)*D* sqrt_term)) if sqrt_term > 0 else 0
+            L_xv_bar_rl = (L_xv_rl/ ((math.pi/2)*D* sqrt_term)) if sqrt_term > 0 else 0
             if L_xv_bar_rl < 0 or M == 2.0000000000000004 : 
                 print(f'L_xv_bar_rl = {L_xv_bar_rl:.3f}')
 
             # Проверка деления на ноль для F_L_xv
             if b_b_bar_rl > 0 and c > 0:
                 sqrt_2c = math.sqrt(2*c)
-                F_L_xv_rl = 1 - (math.sqrt(math.pi) / (2 * b_b_bar_rl * sqrt_2c)) * (phi.get_value((b_b_bar_rl + L_xv_bar)* sqrt_2c) - phi.get_value(L_xv_bar * sqrt_2c))
+                F_L_xv_rl = 1 - (math.sqrt(math.pi) / (2 * b_b_bar_rl * sqrt_2c)) * (phi.get_value((b_b_bar_rl + L_xv_bar_rl)* sqrt_2c) - phi.get_value(L_xv_bar_rl * sqrt_2c))
             else:
                 F_L_xv_rl = 1.0
                 
             if F_L_xv_rl < 0 or M == 2.00000000000000042: 
                 print(f'F_L_xv_rl = {F_L_xv_rl:.3f}')
 
-            delta_zvz_bar_rl = (0.093 / ((V * L_1) / nu)**(1/5)) * (L_1 / D) * (1 + 0.4*M + 0.147 * M**2 - 0.006 * M**3)
+            delta_zvz_bar_rl = (0.093 / ((V * L_1_rl) / nu)**(1/5)) * (L_1_rl / D) * (1 + 0.4*M + 0.147 * M**2 - 0.006 * M**3)
             if delta_zvz_bar_rl < 0 or M == 2.0000000000000004: 
                 print(f'delta_zvz_bar_rl = {delta_zvz_bar_rl:.3f}')
 
-            x_ps_rl = (1 - ((2 * D_bar)/(1 - D_bar**2)) * delta_zvz_bar_rl) * (1 - ((D_bar * (eta_k-1))/(1 - D_bar) * (eta_k_rl + 1)) * delta_zvz_bar_rl)
+            x_ps_rl = (1 - ((2 * D_bar)/(1 - D_bar**2)) * delta_zvz_bar_rl) * (1 - ((D_bar * (eta_k_rl-1))/(1 - D_bar) * (eta_k_rl + 1)) * delta_zvz_bar_rl)
             if x_ps_rl < 0 or M == 2.0000000000000004 : 
                 print(f'x_ps_rl = {x_ps_rl:.3f}')
 
-            x_nos_rl = 0.6 + 0.4 * (1 - math.exp(-0.5 * L1_bar))
+            x_nos_rl = 0.6 + 0.4 * (1 - math.exp(-0.5 * L1_bar_rl))
             if x_nos_rl < 0 or M == 2.0000000000000004: 
                 print(f'x_nos_rl = {x_nos_rl:.3f}')  
 
-            k_aa_zvz_rl = K_aa_t * ((1 + 3*D_bar - (1 / eta_k) * D_bar * (1 - D_bar)) / (1 + D_bar)**2)         
+            k_aa_zvz_rl = K_aa_t * ((1 + 3*D_bar - (1 / eta_k_rl) * D_bar * (1 - D_bar)) / (1 + D_bar)**2)         
             if k_aa_zvz_rl < 0 or M == 2.00000000000000042: 
                 print(f'k_aa_zvz_rl = {k_aa_zvz_rl:.3f}')
 
-            K_aa_zvz_rl = 1 + 3 * D_bar - ((D_bar * (1 - D_bar)) / eta_k_rl)
+            K_aa_zvz_rl = 1 + 3 * D_bar - ((D_bar * (1 - D_bar)) / eta_k_rl)    
             if K_aa_zvz_rl < 0 or M == 2.0000000000000004: 
                 print(f'K_aa_zvz_rl = {K_aa_zvz_rl:.3f}')
             
             if M >=1 :
-                K_aa_rl = (k_aa_zvz_rl + (K_aa_zvz - k_aa_zvz_rl) * F_L_xv_rl) * x_ps_rl * x_M * x_nos_rl
+                K_aa_rl = (k_aa_zvz_rl + (K_aa_zvz_rl - k_aa_zvz_rl) * F_L_xv_rl) * x_ps_rl * x_M * x_nos_rl
             else:
-                K_aa_rl = K_aa_zvz * F_L_xv * x_ps * x_M * x_nos
+                K_aa_rl = K_aa_zvz_rl * F_L_xv_rl * x_ps_rl * x_M* x_nos_rl
 
             row = [M, K_aa]
             for angle_deg in angles_deg:
@@ -441,30 +452,160 @@ def main():
                     writer9.writerow(row)
             M += 0.1
 
+    with open('psi_eps.csv', 'w', newline='') as file10:
+        writer10 = csv.writer(file10)
+        header10 = ['Mach', 'alpha_p','phi_alpha','psi_I','psi_II','z_v', 'psi_eps'] 
+        writer10.writerow(header10)
+        total_iterations = len(psi_II_values) * len(psi_I_values) * len(phi_alpha_values) * len(alpha_p_values) * len(M_values)
+        with tqdm(total=total_iterations, desc="Расчет psi_eps") as pbar:
+            for psi_II in psi_II_values:
+                for psi_I in psi_I_values:
+                    for phi_alpha in phi_alpha_values:
+                        for alpha_p in alpha_p_values:
+                            for M in M_values:
+                                result8 = AeroBDSM.get_bar_z_v(M, lambda_kr, chi_05_kr, zeta_kr)
+                                if result8.ErrorCode == 0:
+                                    z_v = result8.Value
+                                    result10 = AeroBDSM.get_psi_eps(M, alpha_p, phi_alpha,
+                                        psi_I, psi_II, z_v, y_v, x_zI_II, d_II,
+                                        l_1c_II, zeta_II, b_b_II, chi_0_II)
+                                    if result10.ErrorCode == 0:
+                                        psi_eps = result10.Value 
+                                        row = [M, alpha_p, phi_alpha, psi_I, psi_II, z_v, psi_eps]
+                                        writer10.writerow(row)    
+                                pbar.update(1)
 
-with open('psi_eps.csv', 'w', newline='') as file10:
-    writer10 = csv.writer(file10)
-    header10 = ['Mach', 'alpha_p','phi_alpha','psi_I','psi_II','z_v', 'psi_eps'] 
-    writer10.writerow(header10)
-    total_iterations = len(psi_II_values) * len(psi_I_values) * len(phi_alpha_values) * len(alpha_p_values) * len(M_values)
+    with open('eps_alpha_sr.csv', 'w', newline='') as file11:
+        writer11 = csv.writer(file11)
+        header11 = ['eps_alpha_sr', 'Mach', 'alpha_p','phi_alpha','psi_I','psi_II','z_v', 'psi_eps', 'i_v', 'k_aa', 'K_aa_rl'] 
+        writer11.writerow(header11)
+        total_iterations = len(psi_II_values) * len(psi_I_values) * len(phi_alpha_values) * len(alpha_p_values) * len(M_values)
+        with tqdm(total=total_iterations, desc="eps_alpha_sr") as pbar:
+            for psi_II in psi_II_values:
+                for psi_I in psi_I_values:
+                    for phi_alpha in phi_alpha_values:
+                        for alpha_p in alpha_p_values:
+                            for M in M_values:
+                                result8 = AeroBDSM.get_bar_z_v(M, lambda_kr, chi_05_kr, zeta_kr)
+                                if result8.ErrorCode == 0:
+                                    z_v = result8.Value
+                                    result10 = AeroBDSM.get_psi_eps(M, alpha_p, phi_alpha,
+                                        psi_I, psi_II, z_v, y_v, x_zI_II, d_II,
+                                        l_1c_II, zeta_II, b_b_II, chi_0_II)
+                                        
+                                    if result10.ErrorCode == 0:
 
-    with tqdm(total=total_iterations, desc="Расчет psi_eps") as pbar:
-        for psi_II in psi_II_values:
-            for psi_I in psi_I_values:
-                for phi_alpha in phi_alpha_values:
-                    for alpha_p in alpha_p_values:
-                        for M in M_values:
-                            result8 = AeroBDSM.get_bar_z_v(M, lambda_kr, chi_05_kr, zeta_kr)
-                            if result8.ErrorCode == 0:
-                                z_v = result8.Value
-                                result10 = AeroBDSM.get_psi_eps(M, alpha_p, phi_alpha,
-                                    psi_I, psi_II, z_v, y_v, x_zI_II, d_II,
-                                    l_1c_II, zeta_II, b_b_II, chi_0_II)
-                                if result10.ErrorCode == 0:
-                                    psi_eps = result10.Value
-                                    row = [M, alpha_p, phi_alpha, psi_I, psi_II, z_v, psi_eps]
-                                    writer10.writerow(row)    
-                            pbar.update(1)                        
+                                        result9 = AeroBDSM.get_i_v(zeta_rl, D, l_raszmah_rl, y_v, z_v)
+                                        i_v = result9.Value 
+
+                                        psi_eps = result10.Value
+
+                                        result2 = AeroBDSM.get_c_y_alpha_IsP(M, lambda_kr, bar_c_kr, chi_05_kr, zeta_kr)
+
+                                        c_y_alpha_iz_kr = result2.Value
+
+                                        V = 342 * M
+                                        # Исправление для избежания math domain error
+                                        if M < 1:
+                                            sqrt_term = 0  # Для M < 1 используем 0
+                                        else:
+                                            sqrt_term = math.sqrt(M**2 - 1)
+
+                                        b_b_bar_rl = b_b / ((math.pi/2)*D* sqrt_term) if sqrt_term > 0 else 0
+
+                                        L_xv_bar_rl = (L_xv_rl/ ((math.pi/2)*D* sqrt_term)) if sqrt_term > 0 else 0
+
+
+                                        # Проверка деления на ноль для F_L_xv
+                                        if b_b_bar_rl > 0 and c > 0:
+                                            sqrt_2c = math.sqrt(2*c)
+                                            F_L_xv_rl = 1 - (math.sqrt(math.pi) / (2 * b_b_bar_rl * sqrt_2c)) * (phi.get_value((b_b_bar_rl + L_xv_bar)* sqrt_2c) - phi.get_value(L_xv_bar * sqrt_2c))
+                                        else:
+                                            F_L_xv_rl = 1.0
+                                                
+                                        delta_zvz_bar_rl = (0.093 / ((V * L_1_rl) / nu)**(1/5)) * (L_1_rl / D) * (1 + 0.4*M + 0.147 * M**2 - 0.006 * M**3)
+
+                                        x_ps_rl = (1 - ((2 * D_bar)/(1 - D_bar**2)) * delta_zvz_bar_rl) * (1 - ((D_bar * (eta_k-1))/(1 - D_bar) * (eta_k_rl + 1)) * delta_zvz_bar_rl)
+
+                                        x_nos_rl = 0.6 + 0.4 * (1 - math.exp(-0.5 * L1_bar_rl))
+
+
+                                        k_aa_zvz_rl = K_aa_t * ((1 + 3*D_bar - (1 / eta_k) * D_bar * (1 - D_bar)) / (1 + D_bar)**2)         
+
+                                        K_aa_zvz_rl = 1 + 3 * D_bar - ((D_bar * (1 - D_bar)) / eta_k_rl)
+
+                                        if M >=1 :
+                                            K_aa_rl = (k_aa_zvz_rl + (K_aa_zvz_rl - k_aa_zvz_rl) * F_L_xv_rl) * x_ps_rl * x_M * x_nos_rl
+                                        else:
+                                            K_aa_rl = K_aa_zvz_rl * F_L_xv_rl * x_ps_rl * x_M * x_nos_rl
+
+                                            #////////////////////////////////////////////////////////////////////////////////////////
+
+                                        if M < 1:
+                                            sqrt_term = 0  # Для M < 1 используем 0
+                                        else:
+                                            sqrt_term = math.sqrt(M**2 - 1)
+
+                                        b_b_bar = b_b / ((math.pi/2)*D* sqrt_term) if sqrt_term > 0 else 0
+
+                                        L_xv_bar = (L_xv/ ((math.pi/2)*D* sqrt_term)) if sqrt_term > 0 else 0
+
+                                        # Проверка деления на ноль для F_L_xv
+                                        if b_b_bar > 0 and c > 0:
+                                            sqrt_2c = math.sqrt(2*c)
+                                            F_L_xv = 1 - (math.sqrt(math.pi) / (2 * b_b_bar * sqrt_2c)) * (phi.get_value((b_b_bar + L_xv_bar)* sqrt_2c) - phi.get_value(L_xv_bar * sqrt_2c))
+                                        else:
+                                            F_L_xv = 1.0
+
+                                        delta_zvz_bar_kr = (0.093 / ((V * L_1) / nu)**(1/5)) * (L_1 / D) * (1 + 0.4*M + 0.147 * M**2 - 0.006 * M**3)
+
+                                        x_ps = (1 - ((2 * D_bar)/(1 - D_bar**2)) * delta_zvz_bar_kr) * (1 - ((D_bar * (eta_k-1))/(1 - D_bar) * (eta_k + 1)) * delta_zvz_bar_kr)
+
+                                        x_nos = 0.6 + 0.4 * (1 - math.exp(-0.5 * L1_bar))
+
+                                        k_aa_zvz = K_aa_t * ((1 + 3*D_bar - (1 / eta_k) * D_bar * (1 - D_bar)) / (1 + D_bar)**2)         
+
+                                        K_aa_zvz = 1 + 3 * D_bar - ((D_bar * (1 - D_bar)) / eta_k)
+
+                                        k_aa =  K_aa_zvz * x_ps * x_M * x_nos
+
+                                        eps_alpha_sr = (57.3/(2*math.pi)) * (i_v/z_v) * (l_raszmah_kr/l_raszmah_rl) * (c_y_alpha_iz_kr/lambda_kr) * (k_aa/K_aa_rl) * psi_eps                                   
+                                        row = [eps_alpha_sr, M, alpha_p, phi_alpha, psi_I, psi_II, z_v, psi_eps, i_v, k_aa, K_aa_rl ]
+                                        writer11.writerow(row)    
+                                pbar.update(1)
+
+
+
+
+    with open('kappa_q_nos.csv', 'w', newline='') as file12:
+        writer12 = csv.writer(file12)
+        header12 = ['Mach', 'kappa_q'] 
+        writer12.writerow(header12)
+        M = 1
+        while M <= 4.1:
+            result12 = AeroBDSM. get_kappa_q_Nos_Con(M, lambda_Nos)
+            if result12.ErrorCode == 0:
+                kappa_q = result12.Value 
+                row = [M, kappa_q]
+                writer12.writerow(row)
+            M += 0.1
+
+
+    with open('kappa_q.csv', 'w', newline='') as file13:
+        writer12 = csv.writer(file13)
+        header12 = ['Mach', 'kappa_q'] 
+        writer12.writerow(header12)
+        M = 0.5
+        while M <= 4.1:
+            result12 = AeroBDSM.  get_kappa_q_IsP(M, L_A, b_A)
+            if result12.ErrorCode == 0:
+                kappa_q = result12.Value 
+                row = [M, kappa_q]
+                writer12.writerow(row)
+            M += 0.1
+
+
+
 
 if __name__ == "__main__":
     main()
