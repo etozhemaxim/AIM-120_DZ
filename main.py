@@ -140,7 +140,7 @@ chi_05_rl = 0.420
 zeta_rl = 0.0348
 #//////////////////////////////////////////////////////////
 #для  get_psi_eps:
-M_values = np.linspace(0,4.1,36)
+M_values = np.linspace(0.1,4.1,36)
 
 alpha_p_values = np.linspace(0,0.436332,10) #от 0 до +25 градусов
 
@@ -159,11 +159,8 @@ chi_0_II =0.420
 
 #/////////////////////////////////////////////
 
-k_aa_dict = {}
-K_aa_rl_dict = {}
 
-
-lambda_kr = 2.49  # удлинение несущей поверхности
+lambda_kr =5  # удлинение несущей поверхности
 chi_05_kr = 0.510  # угол стреловидности по линии середин хорд, рад
 bar_c_kr = 0.224  # относительная толщина профиля 
 zeta_kr = 0.2  # обратное сужение несущей поверхности 
@@ -173,12 +170,30 @@ b_op = 0.025  # Хорда оперения, м
 l_raszmah_kr = 0.498  # Размах крыла, м
 l_raszmah_rl = 0.651  # Размах оперения, м
 
+# ///////////////////////////////////////////////
+# расчет c^\alpha_y
+
+S_f = 2.1842
+
+S_kr = 0.0996
+
+S_rl = 0.15107
+
+S = S_f + S_kr + S_rl
+
+S_f_bar = S_f / S  # Относительная площадь фюзеляжа
+S_1_bar = S_kr / S  # Относительная площадь оперения  
+S_2_bar = S_rl / S  # Относительная площадь крыла
+
+
+
+# ///////////////////////////////////////////////
+
 # Площади поверхностей
 S_Kons = 4 * 0.03375 * 0.008  # Площадь консолей крыла, м²
 S_op = 2 * 0.033 * 0.025  # Площадь оперения, м²
 
 L_A = 1
-
 b_A = 1.5
 
 
@@ -188,11 +203,7 @@ b_A = 1.5
 # lamb_op = pow(l_raszmah_rl, 2.0) / (S_op + pow(b_kr, 2.0))  # Удлинение оперения
 
 # Итоговые параметры
-S_f = 2.0 * pi * D * (l_f - D / 2.0) + 2.0 * pi * pow(D / 2.0, 2.0)  # Площадь поверхности фюзеляжа, м²
-S = S_op + S_Kons + S_f  # Суммарная площадь
-s_f_bar = S_f / S  # Относительная площадь фюзеляжа
-s_1_bar = S_op / S  # Относительная площадь оперения  
-s_2_bar = S_Kons / S  # Относительная площадь крыла
+# S_f = 2.0 * pi * D * (l_f - D / 2.0) + 2.0 * pi * pow(D / 2.0, 2.0)  # Площадь поверхности фюзеляжа, м²
 
 def save_data_to_csv(x, y, filename):
     """Сохраняет данные в CSV файл"""
@@ -592,19 +603,54 @@ def main():
 
 
     with open('kappa_q.csv', 'w', newline='') as file13:
-        writer12 = csv.writer(file13)
-        header12 = ['Mach', 'kappa_q'] 
-        writer12.writerow(header12)
+        writer13 = csv.writer(file13)
+        header13 = ['Mach', 'kappa_q'] 
+        writer13.writerow(header13)
         M = 0.5
         while M <= 4.1:
-            result12 = AeroBDSM.  get_kappa_q_IsP(M, L_A, b_A)
-            if result12.ErrorCode == 0:
-                kappa_q = result12.Value 
+            result13 = AeroBDSM.  get_kappa_q_IsP(M, L_A, b_A)
+            if result13.ErrorCode == 0:
+                kappa_q = result13.Value 
                 row = [M, kappa_q]
-                writer12.writerow(row)
+                writer13.writerow(row)
             M += 0.1
 
+    #расчет c_^\alpha_y
+    with open('c_y_alpha_sum.csv', 'w', newline='') as file14:
+        writer14 = csv.writer(file14)
+        header14 = ['Mach'] + [f'alpha_{angle}' for angle in angles_deg]
+        writer14.writerow(header14)
 
+        M = 0.5
+        while M <= 4.1:
+            # Получаем все необходимые значения для текущего M
+            result = AeroBDSM.get_c_y_alpha_NosCil_Con(M, lambda_Nos, lambda_Cil)
+            result2 = AeroBDSM.get_c_y_alpha_IsP(M, lambda_kr, bar_c_kr, chi_05_kr, zeta_kr)
+            result6 = AeroBDSM.get_c_y_alpha_IsP(M, lambda_rl, bar_c_kr, chi_05_rl, zeta_rl)
+            result12 = AeroBDSM.get_kappa_q_Nos_Con(M, lambda_Nos)
+            result13 = AeroBDSM.get_kappa_q_IsP(M, L_A, b_A)
+            
+            # Проверяем все ошибки
+            if (result.ErrorCode == 0 and result2.ErrorCode == 0 and 
+                result6.ErrorCode == 0 and result12.ErrorCode == 0 and 
+                result13.ErrorCode == 0):
+                
+                # Вычисляем компоненты
+                c_ya_f = result.Value
+                c_ya_1 = result2.Value * K_aa
+                c_ya_2 = result6.Value * K_aa_rl
+                
+                # Суммарный коэффициент для разных углов атаки
+                row = [M]
+                for angle_deg in angles_deg:
+                    angle_rad = angle_deg * math.pi / 180.0
+                    c_ya_1_sum = (c_ya_f * S_f_bar + 
+                                c_ya_1 * S_1_bar * result12.Value + 
+                                c_ya_2 * S_2_bar * result13.Value) * angle_rad
+                    row.append(c_ya_1_sum)
+                
+                writer14.writerow(row)
+            M += 0.1
 
 
 if __name__ == "__main__":

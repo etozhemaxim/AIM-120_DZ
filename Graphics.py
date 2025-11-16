@@ -793,6 +793,84 @@ plt.show()
 
 
 
+
+
+
+
+data = pd.read_csv('c_y_alpha_sum.csv')
+
+# Создание фигуры с двумя графиками
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
+
+# Цвета для графиков
+colors = ['black', 'blue', 'green', 'orange', 'red', 'purple']
+mach_colors = ['red', 'blue', 'green', 'orange', 'purple', 'brown', 'cyan', 'magenta']
+
+angles = [-10, -5, 0, 5, 10]
+
+# ЛЕВЫЙ ГРАФИК: c_y_alpha_sum vs M для разных α
+for i, angle in enumerate(angles):
+    col = f'alpha_{angle}'
+    
+    ax1.plot(data['Mach'], data[col], 
+             color=colors[i % len(colors)], 
+             linewidth=2,
+             linestyle='-',
+             label=fr'$\alpha = {angle}^\circ$')
+
+ax1.set_xlabel('M', fontsize=15)
+ax1.set_ylabel(r'$c_y^{\alpha}$', fontsize=16)
+ax1.set_title(r'Зависимость $c_y^{\alpha}$ от числа Маха для разных углов атаки', fontsize=14)
+ax1.grid(True, alpha=0.3)
+ax1.legend(loc='upper right', fontsize=10)
+
+# ПРАВЫЙ ГРАФИК: c_y_alpha_sum vs α для разных M
+selected_mach = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+
+print(f"Выбранные числа Маха: {selected_mach}")
+
+# Строим правый график
+for j, mach in enumerate(selected_mach):
+    # Находим ближайшее число Маха в данных
+    idx = (data['Mach'] - mach).abs().idxmin()
+    closest_mach = data['Mach'].iloc[idx]
+    
+    # Данные для текущего числа Маха
+    mach_data = data.iloc[idx]
+    cy_values = []
+    for angle in angles:
+        col = f'alpha_{angle}'
+        cy_values.append(mach_data[col])
+    
+    ax2.plot(angles, cy_values, 
+             color=mach_colors[j % len(mach_colors)], 
+             linewidth=2, 
+             linestyle='-',
+             marker='o',
+             markersize=5,
+             label=fr'$M = {mach}$')
+
+ax2.set_xlabel(r'$\alpha$, град', fontsize=16)
+ax2.set_ylabel(r'$c_y^{\alpha}$', fontsize=16)
+ax2.set_title(r'Зависимость $c_y^{\alpha}$ от угла атаки для разных чисел Маха', fontsize=14)
+ax2.grid(True, alpha=0.3)
+ax2.legend(loc='upper left', fontsize=10) 
+
+# Добавляем линию при α = 0 для наглядности
+ax2.axhline(y=0, color='gray', linestyle='--', alpha=0.5)
+ax2.axvline(x=0, color='gray', linestyle='--', alpha=0.5)
+
+plt.tight_layout()
+plt.show()
+
+
+
+
+
+
+
+
+
 # Вывод информации о данных
 print(f"Диапазон чисел Маха: от {data['Mach'].min()} до {data['Mach'].max()}")
 print(f"Количество точек по M: {len(data)}")
