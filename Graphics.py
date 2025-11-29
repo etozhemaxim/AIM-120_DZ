@@ -865,10 +865,87 @@ plt.show()
 
 
 
+data = pd.read_csv('c_x0_p_Nos_Par.csv')
+
+# Создание графика
+plt.figure(figsize=(12, 8))
+
+# Построение графика
+plt.plot(data['Mach'], data['c_x0_p_Nos_Par'], 
+         color='red', 
+         linewidth=3,
+         linestyle='-',
+         marker='o',
+         markersize=4)
+
+plt.xlabel('M', fontsize=15)
+plt.ylabel(r'$c_\text{x0.нос}$', fontsize=16)
+# plt.title(r'Зависимость $c_\text{x0_нос}$ носовой части от числа Маха', fontsize=14)
+plt.grid(True, alpha=0.3)
+plt.legend(loc='best', fontsize=12)
+
+plt.tight_layout()
+plt.show()
 
 
+data = pd.read_csv('c_y_alpha_final.csv')
 
+# Создание фигуры с двумя графиками
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(20, 8))
 
+# Цвета для графиков
+colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'cyan', 'magenta']
+
+# ЛЕВЫЙ ГРАФИК: c_y_alpha vs M для разных α
+for i, angle in enumerate(angles_deg):
+    col = f'alpha_{angle}'
+    
+    ax1.plot(data['Mach'], data[col], 
+             color=colors[i % len(colors)], 
+             linewidth=2,
+             linestyle='-',
+             marker='o',
+             markersize=3,
+             label=fr'$\alpha = {angle}^\circ$')
+
+ax1.set_xlabel('M', fontsize=15)
+ax1.set_ylabel(r'$c_y^{\alpha}$', fontsize=16)
+ax1.set_title(r'Зависимость $c_y^{\alpha}$ от числа Маха', fontsize=14)
+ax1.grid(True, alpha=0.3)
+ax1.legend(loc='best', fontsize=12)
+
+# ПРАВЫЙ ГРАФИК: c_y_alpha vs α для разных M
+selected_mach = [0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0]
+
+# Строим правый график
+for j, mach in enumerate(selected_mach):
+    # Находим ближайшее число Маха в данных
+    idx = (data['Mach'] - mach).abs().idxmin()
+    closest_mach = data['Mach'].iloc[idx]
+    
+    # Данные для текущего числа Маха
+    mach_data = data.iloc[idx]
+    cy_values = []
+    for angle in angles:
+        col = f'alpha_{angle}'
+        cy_values.append(mach_data[col])
+    
+    ax2.plot(angles, cy_values, 
+             color=colors[j % len(colors)], 
+             linewidth=2, 
+             linestyle='-',
+             marker='s',
+             markersize=4,
+             label=fr'$M = {mach}$')
+
+ax2.set_xlabel(r'$\alpha$, град', fontsize=15)
+ax2.set_ylabel(r'$c_y^{\alpha}$', fontsize=16)
+# ax2.set_title(r'Зависимость $c_y^{\alpha}$ от угла атаки', fontsize=14)
+ax2.grid(True, alpha=0.3)
+ax2.legend(loc='best', fontsize=12)
+
+plt.tight_layout()
+plt.show()
 
 
 # Вывод информации о данных

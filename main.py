@@ -3,8 +3,8 @@ import math
 import csv
 import numpy as np
 from tqdm import tqdm
-import warnings
-warnings.filterwarnings("ignore", category=RuntimeWarning)
+# import warnings
+# warnings.filterwarnings("ignore", category=RuntimeWarning)
 class ProbabilityIntegral:
     def __init__(self):
         # Полная таблица значений Φ(x) с исправленными опечатками
@@ -127,7 +127,7 @@ L_1 = x_b + ( b_b/ 2)
 nu = 15.1*1e-6 #кин. кэф. вязкости воздуха стр.162
 L1_bar=L_1/D
 x_M = 1 #откуда??
-y_v = 1.0
+y_v = 0
 
 #для рулей: 
 eta_k_rl = 1
@@ -160,13 +160,13 @@ chi_0_II =0.420
 #/////////////////////////////////////////////
 
 
-lambda_kr =5  # удлинение несущей поверхности
+lambda_kr =2.49  # удлинение несущей поверхности
 chi_05_kr = 0.510  # угол стреловидности по линии середин хорд, рад
 bar_c_kr = 0.224  # относительная толщина профиля 
 zeta_kr = 0.2  # обратное сужение несущей поверхности 
-# Дополнительные параметры
-b_kr = 0.1  # Хорда крыла, м
-b_op = 0.025  # Хорда оперения, м
+# # Дополнительные параметры
+# b_kr = 0.1  # Хорда крыла, м
+# b_op = 0.025  # Хорда оперения, м
 l_raszmah_kr = 0.498  # Размах крыла, м
 l_raszmah_rl = 0.651  # Размах оперения, м
 
@@ -189,9 +189,9 @@ S_2_bar = S_rl / S  # Относительная площадь крыла
 
 # ///////////////////////////////////////////////
 
-# Площади поверхностей
-S_Kons = 4 * 0.03375 * 0.008  # Площадь консолей крыла, м²
-S_op = 2 * 0.033 * 0.025  # Площадь оперения, м²
+# # Площади поверхностей
+# S_Kons = 4 * 0.03375 * 0.008  # Площадь консолей крыла, м²
+# S_op = 2 * 0.033 * 0.025  # Площадь оперения, м²
 
 L_A = 1
 b_A = 1.5
@@ -226,7 +226,7 @@ def main():
 
         M = 0.5
         while M <= 4.1:
-            result = AeroBDSM.get_c_y_alpha_NosCil_Con(M, lambda_Nos, lambda_Cil)
+            result = AeroBDSM.get_c_y_alpha_NosCil_Par(M, lambda_Nos, lambda_Cil)
             if result.ErrorCode == 0:
                 c_y_alpha = result.Value
                 row = [M]
@@ -624,7 +624,7 @@ def main():
         M = 0.5
         while M <= 4.1:
             # Получаем все необходимые значения для текущего M
-            result = AeroBDSM.get_c_y_alpha_NosCil_Con(M, lambda_Nos, lambda_Cil)
+            result = AeroBDSM.get_c_y_alpha_NosCil_Par(M, lambda_Nos, lambda_Cil)
             result2 = AeroBDSM.get_c_y_alpha_IsP(M, lambda_kr, bar_c_kr, chi_05_kr, zeta_kr)
             result6 = AeroBDSM.get_c_y_alpha_IsP(M, lambda_rl, bar_c_kr, chi_05_rl, zeta_rl)
             result12 = AeroBDSM.get_kappa_q_Nos_Con(M, lambda_Nos)
@@ -652,6 +652,36 @@ def main():
                 writer14.writerow(row)
             M += 0.1
 
+
+
+
+    with open('c_x0_p_Nos_Par.csv', 'w', newline='') as file16:
+        writer16 = csv.writer(file16)
+        header16 = ['Mach', 'c_x0_p_Nos_Par']  # Правильный заголовок
+        writer16.writerow(header16)  # Используем header16, а не header1
+
+        M = 0.5
+        while M <= 4.1:
+            result16 = AeroBDSM.get_c_x0_p_Nos_Par(M, lambda_Nos)
+            if result16.ErrorCode == 0:
+                # Записываем Mach число и результат
+                writer16.writerow([M, result16.Value])
+            else:
+                # Записываем Mach число и ошибку
+                writer16.writerow([M, f'Error: {result16.ErrorCode}'])
+            
+            M += 0.1
+
+
+    with open('c_y_alpha_final.csv', 'w', newline='') as file15:
+        writer15 = csv.writer(file15)
+        header15 = ['Mach'] + [f'alpha_{angle}' for angle in angles_deg]
+        writer15.writerow(header15)
+
+        M = 0.5
+        while M <= 4.1:
+            c_y_alpha = c_ya_1_sum - result16
+            M += 0.1
 
 if __name__ == "__main__":
     main()

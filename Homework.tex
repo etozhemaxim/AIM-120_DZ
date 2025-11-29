@@ -25,7 +25,7 @@
 \usepackage{subfiles}
 \usepackage{tabto}
 
-\usepackage{textgreek}
+\input{textgreek}
 \captionsetup[table]{position=top, singlelinecheck=false, justification=raggedleft}
 
 
@@ -670,12 +670,12 @@ $(K_{\alpha \alpha})_{\text{теор}}$ & 2.873 \\
 \label{M=2}
 \end{table}
 
-На рисунке \ref{K_aa} представлена зависимость $K_{\alpha \alpha }$ для крыльев от $M$ И $\alpha$.
+На рисунке \ref{K_aa} представлена зависимость $K_{\alpha \alpha }$ для крыльев от $\text{М}$ И $\alpha$.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textheight]{images/K_aa.png}
-\caption{Зависимость $K_{\alpha \alpha \text{кр}}$ от $M$ и $\alpha$}
+\caption{Зависимость $K_{\alpha \alpha \text{кр}}$ от $\text{М}$ и $\alpha$}
 \label{K_aa}
 \end{figure}
 
@@ -742,7 +742,7 @@ S_\text{рл} = 4 \cdot 1/2 \cdot  (0.316 + 0.011 ) \cdot 0.231  = 0.15107 {\tex
 \lambda_\text{рл} =  \frac{0.651^2}{0.15107} = 2.805
 \]
 
-На рисунке \ref{C_y_iz.rl} представлена зависимость $c^\alpha_{y\text{из.рл}}$ от $M$ и $\alpha$.
+На рисунке \ref{C_y_iz.rl} представлена зависимость $c^\alpha_{y\text{из.рл}}$ от $\text{М}$ и $\alpha$.
 
 \begin{figure}[H]
 \centering
@@ -751,12 +751,12 @@ S_\text{рл} = 4 \cdot 1/2 \cdot  (0.316 + 0.011 ) \cdot 0.231  = 0.15107 {\tex
 \label{C_y_iz.rl}
 \end{figure}
 
-На рисунке \ref{K_aa_rl} представлена зависимость $K_{\alpha \alpha \text{рл} }$ для крыльев от $M$ И $\alpha$.
+На рисунке \ref{K_aa_rl} представлена зависимость $K_{\alpha \alpha \text{рл} }$ для крыльев от $\text{М}$ И $\alpha$.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textheight]{images/K_aa_rl.png}
-\caption{Зависимость $K_{\alpha \alpha \text{рл}}$ от $M$ и $\alpha$}
+\caption{Зависимость $K_{\alpha \alpha \text{рл}}$ от $\text{М}$ и $\alpha$}
 \label{K_aa_rl}
 \end{figure}
 
@@ -764,18 +764,18 @@ S_\text{рл} = 4 \cdot 1/2 \cdot  (0.316 + 0.011 ) \cdot 0.231  = 0.15107 {\tex
 
 Определяя подъемную силу летательного аппарата, необходимо учитывать не только интерференцию корпуса и несущих поверхностей, но и влияние передних поверхностей на задние. Это влияние объясняется тем, что передние несущие поверхности, будучи установлены под углом атаки, отбрасывают набегающие частицы воздуха в сторону, обратную вектору подъёмной силы. В результате происходит изменение направления потока, или \textit{скос потока}.
 
-Поскольку местные углы скоса потока $\varepsilon$ неодинаковы вдоль размаха задней несущей поверхности, то целесообразно ввести понятие \textit{среднего угла скоса потока} $\varepsilon_{cp}$. Это — условный, постоянный по размаху угол скоса потока, вызывающий тот же эффект, что и действительное поле углов $\varepsilon$.
+Поскольку местные углы скоса потока $\epsilon$ неодинаковы вдоль размаха задней несущей поверхности, то целесообразно ввести понятие \textit{среднего угла скоса потока} $\epsilon_{cp}$. Это — условный, постоянный по размаху угол скоса потока, вызывающий тот же эффект, что и действительное поле углов $\varepsilon$.
 
-При малых углах атаки угол $\varepsilon_{cp}$ пропорционален $\alpha$:
+При малых углах атаки угол $\epsilon_{cp}$ пропорционален $\alpha$:
 
 \begin{equation}
-\varepsilon_{cp} \approx \varepsilon_{cp}^{\alpha} \alpha.
+\epsilon_{cp} \approx \epsilon_{cp}^{\alpha} \alpha.
 \end{equation}
 
-Производная $\varepsilon_{cp}^{\alpha}$ определяется выражением
+Производная $\epsilon_{cp}^{\alpha}$ определяется выражением
 
 \begin{equation}
-\varepsilon_{cp}^{\alpha} = \frac{57.3}{2\pi} \frac{i_\text{В}}{\bar{z}_\text{В}} \frac{l_{kI}}{l_{kII}} \left( \frac{c_{y1\text{из.кр}}^{\alpha}}{\lambda_k} \right)_I \frac{k_{\alpha \alpha I}}{K_{\alpha \alpha II}} \psi_{\varepsilon}.
+\epsilon_{cp}^{\alpha} = \frac{57.3}{2\pi} \frac{i_\text{В}}{\bar{z}_\text{В}} \frac{l_{kI}}{l_{kII}} \left( \frac{c_{y1\text{из.кр}}^{\alpha}}{\lambda_k} \right)_I \frac{k_{\alpha \alpha I}}{K_{\alpha \alpha II}} \psi_{\varepsilon}.
 \end{equation}
 
 Здесь $\bar{z}_\text{В}$ — относительная координата вихря, т.~е. расстояние от борта корпуса до вихря, отнесенное к размаху одной передней консоли. $l_{kI}$ и $l_{kII}$ -- размах крыльев и рулей соответственно.
@@ -785,43 +785,43 @@ S_\text{рл} = 4 \cdot 1/2 \cdot  (0.316 + 0.011 ) \cdot 0.231  = 0.15107 {\tex
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textheight]{images/z_v.png}
-\caption{Зависимость $\bar{z}_\text{В}$ от $M$}
+\caption{Зависимость $\bar{z}_\text{В}$ от $\text{М}$}
 \label{z_v}
 \end{figure}
 
-Зависимость $i_\text{В}$ от $M$ представлена на рисунке \ref{i_v}.
+Зависимость $i_\text{В}$ от $\text{М}$ представлена на рисунке \ref{i_v}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textheight]{images/i_v.png}
-\caption{ависимость $i_\text{В}$ от $M$}
+\caption{ависимость $i_\text{В}$ от $\text{М}$}
 \label{i_v}
 \end{figure}
 
-Зависимость $\psi_\varepsilon$ от $\psi_\mathrm{II}$ и $z_\text{В}$ представлена на рисунке \ref{psi_eps_1}.
+Зависимость $\psi_\epsilon$ от $\psi_\mathrm{II}$ и $z_\text{В}$ представлена на рисунке \ref{psi_eps_1}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textheight]{images/psi_eps_1.png}
-\caption{Зависимость $\psi_\varepsilon$ от $\psi_\mathrm{II}$ и $z_\text{В}$}
+\caption{Зависимость $\psi_\epsilon$ от $\psi_\mathrm{II}$ и $z_\text{В}$}
 \label{psi_eps_1}
 \end{figure}
 
-Зависимость $\psi_\varepsilon$ от $\psi_\mathrm{I}$, $\alpha_\text{п}$, $M$ и $\varphi_\alpha$ представлена на рисунке \ref{psi_eps_2}.
+Зависимость $\psi_\epsilon$ от $\psi_\mathrm{I}$, $\alpha_\text{п}$, $M$ и $\varphi_\alpha$ представлена на рисунке \ref{psi_eps_2}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.77\textheight]{images/psi_eps_2.png}
-\caption{Зависимость $\psi_\epsilon$ от $\psi_\mathrm{I}$, $\alpha_\text{п}$, $M$ и $\varphi_\alpha$}
+\caption{Зависимость $\psi_\epsilon$ от $\psi_\mathrm{I}$, $\alpha_\text{п}$, $\text{М}$ и $\varphi_\alpha$}
 \label{psi_eps_2}
 \end{figure}
 
-Зависимость $\varepsilon^\alpha_\text{ср}$ от $\psi_\mathrm{I}$, $\alpha_\text{п}$, $M$ и $\varphi_\alpha$ представлена на рисунке \ref{eps_alpha_2}.
+Зависимость $\epsilon^\alpha_\text{ср}$ от $\psi_\mathrm{I}$, $\alpha_\text{п}$, $\text{М}$ и $\varphi_\alpha$ представлена на рисунке \ref{eps_alpha_2}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.77\textheight]{images/eps_alpha_2.png}
-\caption{Зависимость $\varepsilon^\alpha_\text{ср}$ от $\psi_\mathrm{I}$, $\alpha_\text{п}$, $M$ и $\varphi_\alpha$}
+\caption{Зависимость $\epsilon^\alpha_\text{ср}$ от $\psi_\mathrm{I}$, $\alpha_\text{п}$, $\text{М}$ и $\varphi_\alpha$}
 \label{eps_alpha_2}
 \end{figure}
 
@@ -830,27 +830,43 @@ S_\text{рл} = 4 \cdot 1/2 \cdot  (0.316 + 0.011 ) \cdot 0.231  = 0.15107 {\tex
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textheight]{images/k_q.png}
-\caption{Зависимость $k_{q \text{из.рл}}$ от $M$}
+\caption{Зависимость $k_{q \text{из.рл}}$ от $\text{М}$}
 \label{k_q}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\textheight]{images/k_q_nos.png}
-\caption{Зависимость $k_{q \text{нос}}$ от $M$}
+\caption{Зависимость $k_{q \text{нос}}$ от $\text{М}$}
 \label{k_q_nos}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.65\textheight]{images/с_alpha_y.png}
+\caption{Зависимость $c^\alpha_{y1}$ от $\text{М}$ и $\alpha$}
+\label{с_alpha_y}
 \end{figure}
 
 \subsection{Итоги параграфа}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.6\textheight]{images/с_alpha_y.png}
-\caption{Зависимость $c^\alpha_y$ от $M$ и $\alpha$}
-\label{с_alpha_y}
+\includegraphics[width=0.65\textheight]{images/с_alpha_y_true.png}
+\caption{Зависимость $c^\alpha_y$ от $\text{М}$ и $\alpha$}
+\label{с_alpha_y_true}
 \end{figure}
 
 \section{Расчёт $c_x$}
+
+\subsection{Расчёт $c_\text{x0.нос}$ }
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.65\textheight]{images/с_x_0_par.png}
+\caption{Зависимость $c_{x0}$ от $\text{М}$}
+\label{с_x_0_par}
+\end{figure}
 
 \newpage
 \begin{thebibliography}{9}
